@@ -1,0 +1,186 @@
+\documentclass{mbd_fullpaper}
+
+
+\begin{document}
+
+%New commands
+\newcommand{\heading}[1]{
+   {\medskip\hskip5em\bf\large{#1}
+   \vskip0.5ex
+   }
+}
+\newcommand{\eqnref}[1]{
+  (\ref{#1})
+}
+
+\renewcommand{\refname}{\medskip\bf\large References}
+
+
+
+%------------------------------------------------------------
+% title
+\begin{center}
+  \Large{\bf
+Authors' Instructions for Preparation of the Full Paper \\Contributions for the ECCOMAS Multibody Dynamics 2017  }
+\end{center}
+
+%------------------------------------------------------------
+% authors
+\begin{center}
+\large{
+    Firstname Lastname1$^{1}$,
+    Second Author$^2$,
+    Third Author$^3$,
+    Fourth Author$^3$
+}
+\end{center}
+
+%------------------------------------------------------------
+% affiliations
+{
+\begin{center}
+ \normalsize
+  \begin{tabular}{c}
+    $^1$ Faculty of Mechanical Engineering \\
+    University of Technology               \\
+    Address, Postcode City, Country        \\
+    email1@address                         \\
+  \end{tabular}
+  \begin{tabular}{c}
+    $^2$ Institute for Mechatronics       \\
+    University of Technology               \\
+    Address, Postcode City, Country        \\
+    email2@address                         \\	
+  \end{tabular} \\
+
+  \vspace{0.5ex}
+
+  \begin{tabular}{c}
+    $^3$Institute of Mechanics              \\
+    University of Technology                   \\
+    Address, Postcode City, Country            \\
+    {[email3, email4]@address} \\
+  \end{tabular}
+\end{center}
+}
+
+%------------------------------------------------------------
+% abstract
+
+\section*{Abstract}
+
+In this document, you will find short instructions how to prepare a Full Paper contribution for the ECCOMAS Multibody Dynamics 2017 Conference Proceedings. The abstract part of the Full Paper should be formatted as one paragraph not longer than 250 words and it should fit to the title page. The abstract begins with the "Abstract" header and contains a short description of your contribution and with simple formatting, preferably without equations, figures or references. Submission of PDF files with your contributions is organized through the Conference Management System.
+
+
+\keywords{multibody dynamics, eccomas, conference, Prague, author's instructions, full paper, proceedings, \LaTeX}
+
+
+\section{Introduction}
+
+This document presents basic instructions for preparation of your Full Paper contribution for the ECCOMAS Thematic Conference on Multibody Dynamics 2017 using \LaTeX system. On the Conference website you will find the necessary files [\texttt{http://multibody2017.cz}]. You can use this document as a template for your contribution. If you are familiar with Microsoft Word system, please use Word template file with accompanying instructions provided in separate file that can be found on the Conference website.
+
+
+\section{Text Formatting Instructions}
+Contribution for Full Paper should be written in English on minimum 4 pages and maximum 10 pages with A4 size. The template margins must be followed. The paper used should have the size 210 $\times$ 297 mm, which is the European A4 size. It is suggested to use styles for formatting, automatic reference and figure numbering to avoid editorial errors. To avoid compatibility problems it is advised to use only the Latin alphabet and underscore character in the file name.
+
+It should contain, beside the list of the authors, their organizations with addresses and e-mails. The reference marks can be omitted if all authors are from the same affiliation.
+For the full compliance of your contribution with the style of Conference Proceedings you can use this file as a template with defined styles (for title, author list, paragraph and so on). The text should be justified and should occupy full line width. Font of the manuscript should be Times New Roman and for the body of the text use 10pt size with single line spacing. Bold type and underlining should be avoided. Following the style defined by this document font sizes and styles are given in Table~\ref{tab:tab1}.
+
+\renewcommand{\arraystretch}{1.5}
+
+\begin{table}[!ht]
+  \begin{center}
+    \caption{Font sizes and styles}
+    \vspace{1mm}
+    \begin{tabular}{|p{5cm}|c|c|}
+      \hline
+        {\it style element}&	{\it Example}&	{\it size and style}\\
+      \hline
+      \hline
+        normal text, list of authors' institutions, list of reference, caption &	normal text&	\textbackslash normalsize, 10pt\\
+      \hline
+        Title&	{\bf\Large Title}&	\textbackslash bf\textbackslash Large, size 14pt\\
+      \hline
+        list of authors&	{\large Firstname Lastname}&	\textbackslash large, size 12pt\\
+      \hline
+        headings (1st level)& {\large	Abstract, References}&	 \textbackslash section*, size 12pt\\
+      \hline
+        headings (2nd level, numbered)&	{\bf\large 3. Introduction}&	\textbackslash section, size 12pt\\
+      \hline
+        headings (2nd level, numbered)& {\bf\large 2.1 Subchapter}&	\textbackslash subsection, size 12pt\\
+      \hline
+    \end{tabular}
+    \label{tab:tab1}
+  \end{center}
+\end{table}
+
+Line drawings, if in raster format, should have a resolution of at least 600~dpi. Raster color pictures should have at least 300~dpi. Figures should be numbered and should have a caption preferably positioned under the figures, in contrast to the caption belonging to a table, which should appear above the table. In this case, please center the figures or your tabular material as well as captions. Alternatively, in order to make more efficient layout, captions can be placed on the side. It is also possible to put figures (or figures and tables) side-by-side.
+
+In order to ensure a reasonable quality of the reproduction of your illustrations we do not advise usage of shading. The contrast between the elements of the illustration should be as pronounced as possible. If program screen-shots are necessary, please make sure that you are happy with the print quality before you send the files. If you use colored figures please make sure that they are legible in black and white. Some colors as well as the contrast of converted colors show up very poorly when printed in black and white.
+
+
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width=8cm]{image.eps}
+    \caption{Example figure; presenting a scheme of benchmark \cite{Author2016}}
+    \label{fig:fig1}
+  \end{center}
+\end{figure}
+
+
+Equations or formulas should be centered and set in a separate line with extra space above and below and should be numbered for reference. The equation numbers should be consecutive within your contribution and should be written in parentheses on the right margin, like for example equation \eqnref{eqn1}.
+
+\begin{equation}
+  \left [
+  \begin{array}{cc}
+    \boldsymbol{M}& \boldsymbol{\Phi^T}\\
+    \boldsymbol{\Phi}& \boldsymbol{0}\\
+  \end{array}
+  \right ]
+  \left [
+  \begin{array}{c}
+    \bm{\ddot s}\\
+    -\boldsymbol{\lambda}\\
+  \end{array}
+  \right ]
+  =
+  \left [
+  \begin{array}{c}
+    \boldsymbol{p_1}\\
+    \boldsymbol{p_2}\\
+  \end{array}
+  \right ]
+  \label{eqn1}
+\end{equation}
+
+
+\subsection{Citations}
+
+Reference entries should be printed in order of citation. Each reference can be cited in the body of the abstract with its list number in the square brackets, like for example \cite{Schiehlen1997} or \cite{Author2016}. Examples are given at the end of this article to present the general style for references.
+
+\section{Submission of full paper}
+
+Submission of full paper will be done exclusively through the conftool, the Conference Management System at [\texttt{https://www.conftool.com/multibody2017}]. Full paper submission requires a PDF of your Full paper contribution and zip archive with Full paper source code (MSWORD or \LaTeX file) together with figures in reasonable resolution. PDF of your Full paper (like camera ready) should visually corresponds to the given style, same as for this article Size of your PDF file is limited to 5MB. Before submitting your paper, check that it is in accordance with the conference style guidelines presented in this template.
+
+\section{Conclusion}
+We very much look forward to welcoming you in Prague! Best wishes and the warmest regards from the Organizing Committee of the ECCOMAS Thematic Conference on Multibody Dynamics 2017.
+
+\section*{Acknowledgments}
+
+For Acknowledgments, Abstract and References the heading should be treated as a section heading and should not be assigned a number, see in Table\ref{tab:tab1}.
+
+
+%------------------------------------------------------------
+% biliography
+\begin{thebibliography}{mbd}
+
+\bibitem{Author2016}
+A. Author, B. Author, C. Author and D. Author, "Numerical solution of multibody dynamical systems in interaction with fluid," in \textit{Proceedings of the International Symposion on Computational Mechanics}, City, 2016.
+\bibitem{Bauchau2011}
+O. A. Bauchau, Flexible multibody dynamics, Dordrecht: Springer, 2011.
+\bibitem{Schiehlen1997}
+W. Schiehlen, "Multibody system dynamics: Roots and perspectives," \textit{Multibody System Dynamics}, vol. 1, no. 1, pp. 149-188, 1997.
+
+\end{thebibliography}
+
+\end{document} 
