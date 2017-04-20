@@ -48,6 +48,8 @@ Joseph Thompson
 %------------------------------------------------------------
 % abstract
 
+
+
 \section*{Abstract}
 
 In this document, you will find short instructions how to prepare a Full Paper contribution for the ECCOMAS Multibody Dynamics 2017 Conference Proceedings. The abstract part of the Full Paper should be formatted as one paragraph not longer than 250 words and it should fit to the title page. The abstract begins with the "Abstract" header and contains a short description of your contribution and with simple formatting, preferably without equations, figures or references. Submission of PDF files with your contributions is organized through the Conference Management System.
@@ -55,6 +57,78 @@ In this document, you will find short instructions how to prepare a Full Paper c
 
 \keywords{multibody dynamics, eccomas, conference, Prague, author's instructions, full paper, proceedings, \LaTeX}
 
+\section{extended abs}
+
+\heading{Abstract}
+Wave-Based Control (WBC) is particularly effective for achieving rest to rest motion of under-actuated, cascaded, lumped flexible systems such as in Fig.~\ref{fig:rec_sys}. The motion of each mass $x_1$ to $x_n$ of this system can be considered as a superposition of rightwards and leftwards travelling components or ‘waves’, starting at the actuator $x_0$, travelling to the tip, $x_n$, and returning to the actuator. The control strategy is based on considering the motion of the actuator $x_0$ as simultaneously launching rightwards travelling motion (waves) into the system while absorbing leftwards travelling motion coming back from the system. For rest-to-rest manoeuvres to a target displacement, the controller launches a wave into the system of half the target displacement and absorbs the returning wave after it has travelled to the end of the system and has been reflected back to the actuator. This absorption by the actuator moves the system the second half of the target displacement while absorbing vibrations. Thus position control and active vibration damping are combined in a single actuator motion. The resulting control strategies have many advantages, including robustness to modelling errors and system changes, minimal sensing and ease of implementation.
+%\begin{figure}[h]
+%  \begin{center}
+%    \includegraphics[scale=1]{lumped_system.pdf}
+%    \caption{Non-uniform lumped system with one free and one moving boundary \label{fig:rec_sys}}
+%  \end{center}
+%\end{figure}
+The cascaded system of Fig.~\ref{fig:rec_sys} is similar to a range of systems of practical engineering interest, including robot arms, cranes, space structures and disk drive heads. Much work has been done on wave-based modelling and control of such systems \cite{OConnor2011, Connor2005}. This paper asks the question: to what extent can this work be extended to a wider class of systems? 
+This question is motivated by the control of spacecraft with features such as structural flexibility, flexible appendages and fuel slosh.
+Mathematical models of these systems, as presented to the control engineer, do not appear to have the same structure as a mass-spring string actuated at one end.
+Many systems for instance are modelled as multi-rigid-body systems ~\cite{Kane1980} with multiple sensors and actuators or simply presented as a linear system in the form of a set of state space matrices.
+This leads to the following problem. Given a generic, SISO (single-input single-output), lightly damped mechanical system described by
+\begin{equation}
+\ddot{\mathbf{q}}(t) + \Lambda\mathbf{q}(t) = \mathbf{b}u(t)
+\label{eq:modal1}
+\end{equation}
+\begin{equation}
+y(t) = C \mathbf{q}(t)
+\label{eq:modal2}
+\end{equation}
+\begin{equation}
+\Lambda = \begin{bmatrix}
+\lambda_1  &  0 & \cdots & 0 \\
+0 & \lambda_2  & \ddots & 0 \\
+\vdots & \ddots & \ddots & \vdots \\
+0 & 0 & \cdots & \lambda_n \end{bmatrix}
+\end{equation}
+under what conditions can this system be transformed into the equivalent of a mass-spring string such as in Fig.1 (for which WBC is known to work well)?
+Here $u(t)$ is the input and $y(t)$ is the output.
+We restrict ourselves to the case where the eigenvalues are real and distinct, i.e.
+\begin{equation}
+0 \leq \lambda_1<\lambda_2< \cdots <\lambda_n
+\label{eq:lambda}
+\end{equation}
+The problem becomes if (and if so, how) this system can be transformed to a structure similar to that of the system in Fig.1.
+The required structure is
+\begin{equation}
+M\ddot{\mathbf{z}}(t) + K\mathbf{z}(t) = \mathbf{\hat{b}}u(t)
+\label{eq:eom1}
+\end{equation}
+\begin{equation}
+y(t) = \hat{C} \mathbf{z}(t)
+\label{eq:eom2}
+\end{equation}
+\begin{equation}
+M = \begin{bmatrix}
+m_1  &  0 & \cdots & 0 \\
+0 & m_2  & \ddots & 0 \\
+\vdots & \ddots & \ddots & \vdots \\
+0 & 0 & \cdots & m_n \end{bmatrix}
+, \quad
+K = \begin{bmatrix}
+k_1+k_2  &  -k_2 & 0 & \cdots & 0 \\
+-k_2 & k_2+k_3  & -k_3 & \ddots & 0 \\
+0 & -k_3 & \ddots & \ddots & \vdots \\
+\vdots & \ddots & \ddots & k_{n-1}+k_n & -k_{n} \\
+0 & 0 & \cdots & -k_{n} & k_n \end{bmatrix}
+\end{equation}
+An algorithm is developed to find a suitable coordinate transformation $\mathbf{z} = P \mathbf{q}$ to achieve this objective.
+The problem may be first reduced to an inverse eigenvalue problem for a Jacobi matrix. This may be solved using the Lanczos algorithm as presented in \cite{gladwell1986inverse}. 
+It is found that there are many equivalent mass-spring systems depending on the desired forms of the input vector $\hat{\mathbf{b}}$ and output matrix $\hat{C}$, that is, on the input-output structure of the system or the location(s) of actuators and sensors in the string.
+
+The particular example we use to test the algorithm is a planar model of a rocket with a flexible structure as in Fig.~\ref{fig:flex_rocket}. The model consists of three rigid bodies connected by two torsional springs. The base body has an attitude angle $\theta$ relative to an inertial reference frame and the other bodies have relative angles $\phi_1$ and $\phi_2$ respectively between themselves and the segment below as shown. The rocket has a gimballed engine producing a thrust $T$ at an angle $\delta$ to the main body and also a lateral thruster located on the bottom segment which produces a variable thrust $f$. Different test cases are examined where different actuators are used and attitude sensors are located at different positions along the rocket body i.e. on different segments. In each case an equivalent mass-spring model for the system is calculated.
+%\begin{figure}[h]
+%  \begin{center}
+%    \includegraphics[scale=1.5]{fig_flexrocket.pdf}
+%    \caption{Segmented planar rocket model \label{fig:flex_rocket}}
+%  \end{center}
+%\end{figure}
 
 \section{Introduction}
 
