@@ -6,7 +6,7 @@
 %----------------------------------------------------------------------------------------------------
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{fullpaper_MBD_2017_LaTeX}[2017/03/28 MBD fullpaper class]  
+\ProvidesClass{mbd_fullpaper}[2017/03/28 MBD fullpaper class]  
 \ProcessOptions\relax
 
 \DeclareOption{10pt}{\OptionNotUsed}  
