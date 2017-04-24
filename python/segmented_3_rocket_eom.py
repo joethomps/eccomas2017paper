@@ -36,7 +36,6 @@ O.set_vel(Ne, 0)
 CM1 = Point('CM1')
 CM1.set_vel(A,0)
 CM1.set_vel(Ne,u1*A.x + u2*A.z)
-#CM1.set_acc(N,ax*A.x + az*A.z)
 
 P1 = CM1.locatenew('P1', (h/2)*A.x)
 P1.v2pt_theory(CM1,Ne,A)
