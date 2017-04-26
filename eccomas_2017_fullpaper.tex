@@ -53,63 +53,60 @@ Joseph W. Thompson
 \section*{Abstract}
 % It contains a general introduction to the topic, outlines the major results, and summarizes the conclusions.
 % 250 words max.
-Wave-Based Control (WBC) is particularly effective for achieving rest to rest motion of under-actuated, cascaded, lumped flexible systems.
-In this control scheme the actuator simultaneously launches and absorbs wave components travelling into and out of the system at one end.
-By doing this the control scheme combines position control and active vibration damping.
-Much work has been done on wave-based modelling and control of mass-spring strings.
-This paper asks the question: to what extent can this work be extended to a wider class of systems?
-This question is motivated by the control of spacecraft with features such as structural flexibility, flexible appendages and fuel slosh.
-Most mathematical models of these systems presented to the control engineer, do not obviously have the structure of a mass-spring string.
-However, often it is possible to calculate an equivalent mass-spring system.
-This paper identifies a class of systems, with real, positive and distinct eigenvalues, for which this transformation is possible and presents an algorithm for calculating the equivalent mass and spring values.
-A segmented planar multibody rocket model is used as an example.
-This model consists of three rigid bodies connected by two torsional springs and a gimballed rocket engine with constant thrust which may be used for attitude control.
-Several test cases with different sensor and actuator configurations are examined and equivalent mass-spring systems are calculated in each case.
+
+%Wave-Based Control (WBC) is particularly effective for achieving rest to rest motion of under-actuated, cascaded, lumped flexible systems.
+%In this control scheme the actuator simultaneously launches and absorbs wave components travelling into and out of the system at one end.
+%By doing this the control scheme combines position control and active vibration damping.
+%Much work has been done on wave-based modelling and control of mass-spring strings.
+%This paper asks the question: to what extent can this work be extended to a wider class of systems?
+%This question is motivated by the control of spacecraft with features such as structural flexibility, flexible appendages and fuel slosh.
+%Most mathematical models of these systems presented to the control engineer, do not obviously have the structure of a mass-spring string.
+%However, often it is possible to calculate an equivalent mass-spring system.
+%This paper identifies a class of systems, with real, positive and distinct eigenvalues, for which this transformation is possible and presents an algorithm for calculating the equivalent mass and spring values.
+%A segmented planar multibody rocket model is used as an example.
+%This model consists of three rigid bodies connected by two torsional springs and a gimballed rocket engine with constant thrust which may be used for attitude control.
+%Several test cases with different sensor and actuator configurations are examined and equivalent mass-spring systems are calculated in each case.
+
+\keywords{multibody dynamics, eccomas, conference, Prague, author's instructions, full paper, proceedings, \LaTeX}
 
 \section{Introduction}
-
 % The first paragraph should follow the inverted triangle principle: start with a broad statement and
 % become more detailed until finally identifying the specific problem that the paper addresses.
-Many spacecraft may be modelled as multi-body systems.
-%Many systems for instance are modelled as multi-rigid-body systems ~\cite{Kane1980} with multiple sensors and actuators or simply presented as a linear system in the form of a set of state space matrices.
+Many spacecraft and rockets may be modelled as a collection of rigid bodies and particles with connecting springs.
 These representations are particularly useful for the initial design of an attitude controller.
-Such models usually consist of a collection of rigid bodies, particles and springs.
-Flexible appendages such as solar panels may be represented as a rigid bodies joined to a base body with springs in between.
-Sloshing fuel may be represented as a simple pendulum or a point mass connected with springs and constrained to move along a certain path.
+Flexible appendages such as solar panels, or robot arms, may be represented as rigid bodies and sloshing fuel may be represented as a simple pendulum or a mass and spring.
 These systems are usually under-actuated i.e. have more degrees of freedom than actuators.
 In attempting to re-orient such a system, one will usually excite certain modes of vibration.
-To bring the system back to rest, the control algorithm must dampen these vibrations.
+To bring the system back to rest, the control algorithm must effectively dampen these vibrations.
 To end up with the correct target attitude at the end of a manoeuvre this exciting and damping of vibrations must be done in precisely the right way.
 One possible approach is to model the motion of each part of the system as a superposition of two components or `waves'.
 One wave is travelling from the actuator into the system and the other is travelling from the system back towards the actuator.
 In this way the actuator is simultaneously launching a wave into the system and absorbing a returning wave from the system.
 A complete manoeuvre consists of launching a certain wave into the system and then absorbing the returning wave to bring the system back to rest.
-The above wave-based control technique has been applied successfully to rectilinear mass-spring systems.
+The above wave-based control technique has been applied successfully to uniform and non-uniform rectilinear mass-spring systems.
 The aim of this paper is to extend the wave-based control theory to a wider class of systems, namely the multi-body spacecraft described above. 
 
-LR of WBC
-For a rectilinear mass-spring string with actuator at one end the waves are well defined
-However for more complicated systems, multibody spacecraft, not as clear
-Aim is to extend the theory to a wider class of systems. 
-Modelling motion of mass-spring strings as waves.
-\cite{OConnor2011, Connor2005}. 
-Two types of systems
-Linear control system measures returning wave using first and second mass/ force
-Work well for uniform and non-uniform strings of masses and springs
-Disturbances, MIMO, measuring different masses
+Figure \ref{fig:wave-based-control} shows a simple wave-based control system.
 \begin{figure}[h]
   \begin{center}
-   % \includegraphics[scale=1.5]{fig_wave-based-control.pdf}
+    % \includegraphics[scale=1.5]{fig_wave-based-control.pdf}
     \caption{Wave-based-control scheme for a mass-spring system \label{fig:wave-based-control}}
   \end{center}
 \end{figure}
+The mass-spring system shown is a classic example of an under-actuated control problem.
+The motion of this system may be modelled as a superposition of waves or wave-like components \cite{OConnor2011}.
+Using this wave-based model of the system, linear controllers may be designed with a number of desirable properties \cite{Connor2005}. 
+These include robustness to modelling errors, system changes, sensor delays and non-ideal actuation, minimal sensing and ease of implementation.
+The actuator motion is the sum of half the reference or desired motion (a launch wave) and the returning wave.
+This returning wave is calculated by taking two measurements from the system, close to the actuator.
+In this case these are the position of the first mass $x_1$ and the force being applied to the first mass $f_0$ 
+This control strategy has been successfully applied and tested numerically on a much wider array of systems.
+In the mass-spring system shown the underlying wave model is well understood, but this is not the case not for more complicated systems such as the multi-body spacecraft mentioned above.
 
-These contol systems have been applied and tested numerically on a much wider class of systems.
-However, in ms systems the relationship to an underlying wave model is well understood, not for these systems.
-LR Gladwell and conversion to mass-spring systems
-
+It is proposed here that many of these more complicated systems are in fact similar in structure to the mass-spring system in Figure \ref{fig:wave-based-control}.
+Furthermore it is proposed that through a suitable change of coordinates, an equivalent mass-spring string may be calculated for many of these systems.
 This leads to the following problem statement:
-Given a SISO (single-input single-output), undamped system described by
+Given a SISO (single-input single-output), undamped system described by:
 \begin{equation}
 \ddot{\mathbf{q}}(t) + \Lambda\mathbf{q}(t) = \mathbf{b}u(t)
 \label{eq:modal1}
@@ -128,13 +125,10 @@ where
 ,\quad \mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{bmatrix}
 ,\quad \mathbf{c} = \begin{bmatrix} c_1 \\ c_2 \\ \vdots \\ c_n \end{bmatrix}
 \end{equation}
-under what conditions can this system be transformed into the equivalent of a mass-spring string such as in Fig.1 (for which WBC is known to work well)?
-Here $u(t)$ is the input and $y(t)$ is the output.
-We restrict ourselves to the case where the eigenvalues are real and distinct, i.e.
-\begin{equation}
-0 \leq \lambda_1<\lambda_2< \cdots <\lambda_n
-\label{eq:lambda}
-\end{equation}
+\begin{enumerate}
+\item under what conditions can this system be transformed into an equivalent mass-spring string such as in Fig.1 (for which WBC is known to work well) Here $u(t)$ is the input and $y(t)$ is the output.
+\item how can the system be calculated
+\end{enumerate}
 The problem becomes if (and if so, how) this system can be transformed to a structure similar to that of the system in Fig.1.
 The required structure is
 \begin{equation}
@@ -162,8 +156,6 @@ k_1+k_2  &  -k_2 & 0 & \cdots & 0 \\
 ,\quad \mathbf{\hat{c}} = \begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}
 \end{equation}
 
-
-
 %The introduction ends with the “road-map” paragraph. This paragraph outlines the remaining sections of the paper. It can either give a general outline of the contribution,
 %or a specific, section-by-section breakdown of the remaining article.
 Road map
@@ -179,8 +171,8 @@ Section 7 - Conclusions
 
 \section{Mathematical Model of Segmented Rocket}
 In this section the equations of motion for a planar segmented rocket are presented.
-Why pick this mode
-It should be noted that even though this is a lumped model with three bodies and two springs, the attitude dynamics of this system are quite different from that of a simple rectilinear 3-mass, 2-spring system and the subtle differences, which will become clear in subsequent sections are what motivate the current study.
+Why pick this model
+It should be noted that even though this is a lumped model with three bodies and two springs, the dynamics of this system are quite different from that of a simple rectilinear 3-mass, 2-spring system and the subtle differences, which will become clear in subsequent sections are what motivate the current study.
 Also note that from control point of view it is inputs and outputs that are important
 When sensor is at top how can we apply WBC theory.
 
@@ -203,7 +195,6 @@ The equations of motion of the system were derived using Kane's method \cite{Kan
 where
 \begin{equation}
 \input{python/eqM.tex}
-E =
 \end{equation}
 Different actuators
 figure
@@ -215,6 +206,13 @@ tuning parameters w and k0
 choose w from k1 m1
 
 \section{Class of systems suitable for WBC}
+This section outlines the process for converting
+We restrict ourselves to the case where the eigenvalues are real and distinct, i.e.
+\begin{equation}
+0 \leq \lambda_1<\lambda_2< \cdots <\lambda_n
+\label{eq:lambda}
+\end{equation}
+
 
 \section{Numerical Examples}
 Physical parameters vega
