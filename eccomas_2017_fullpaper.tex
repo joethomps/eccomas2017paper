@@ -1,4 +1,9 @@
 \documentclass{mbd_fullpaper}
+\usepackage{pgfplots}
+\usetikzlibrary{shapes,arrows,scopes,patterns,decorations.pathreplacing}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
 
 \begin{document}
 
@@ -89,14 +94,14 @@ The aim of this paper is to extend the wave-based control theory to a wider clas
 
 \begin{figure}[h]
   \begin{center}
-    	\includegraphics[scale=1]{graphics/WBC-nunif-mspring-force.pdf}
-    	%\input{graphics/WBC-nunif-mspring-force.tex}
-	\caption{Wave-based-control scheme for a mass-spring string \label{fig:wave-based-control}}
+    	%\includegraphics[scale=1]{graphics/WBC-nunif-mspring-force.pdf}
+    	\input{graphics/WBC-nunif-mspring-force.tex}
+	\caption{Wave-based control scheme for a mass-spring string \label{fig:wave-based-control}}
   \end{center}
 \end{figure}
 Figure \ref{fig:wave-based-control} shows a simple wave-based control system.
 The generic mass-spring string shown is a classical example of an under-actuated control problem.
-The motion of this lumped system may be modelled as a superposition of two "waves" or wave-like components travelling rightwards and leftwards\cite{OConnor2011}.
+The motion of this lumped system may be modelled as a superposition of two "waves" or wave-like components travelling rightwards and leftwards \cite{OConnor2011}.
 Using this wave-based interpretation of the system, linear controllers have been designed with a number of desirable properties \cite{Connor2005}. 
 These include robustness to modelling errors, system changes, sensor delays and non-ideal actuation, minimal sensing and ease of implementation.
 These controllers operate as follows: The initial movement of the actuator $x_0$ launches a wave (motion which propagates rightwards through the string) which reaches the system boundary and is reflected.
@@ -126,20 +131,26 @@ where
 0 & 0 & \cdots & \lambda_n \end{bmatrix}
 ,\quad \mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{bmatrix}
 ,\quad \mathbf{c} = \begin{bmatrix} c_1 \\ c_2 \\ \vdots \\ c_n \end{bmatrix}
+\label{eq:modal3}
 \end{equation}
 where $u(t)$ is the input and $y(t)$ is the output, this leads to the following problem statement:
 \begin{enumerate}
 \item under what conditions can this system be transformed into an equivalent mass-spring string such as in Fig.1 (for which WBC is known to work well) and
 \item how can the parameters of this equivalent system be calculated?
 \end{enumerate}
-The problem becomes if (and if so, how) we can find a coordinate transformation $\mathbf{x} = P \mathbf{q}$ such that:
+The problem becomes if (and if so, how) we can find a coordinate transformation
+\begin{equation}
+\mathbf{x} = P \mathbf{q}
+\label{eq:transform}
+\end{equation}
+such that:
 \begin{equation}
 M\ddot{\mathbf{x}}(t) + K\mathbf{x}(t) = \mathbf{\hat{b}}u(t)
-\label{eq:eom1}
+\label{eq:ms1}
 \end{equation}
 \begin{equation}
 y(t) = \mathbf{\hat{c}}^T \mathbf{x}(t)
-\label{eq:eom2}
+\label{eq:ms2}
 \end{equation}
 and $M$, $K$, $\mathbf{\hat{b}}$ and $\mathbf{\hat{c}}$ have the following structure:
 \begin{equation}
@@ -155,8 +166,9 @@ k_1+k_2  &  -k_2 & 0 & \cdots & 0 \\
 0 & -k_3 & \ddots & \ddots & \vdots \\
 \vdots & \ddots & \ddots & k_{n-1}+k_n & -k_{n} \\
 0 & 0 & \cdots & -k_{n} & k_n \end{bmatrix}
-,\quad \mathbf{\hat{b}} = \begin{bmatrix} {1}/{m_1} \\ 0 \\ \vdots \\ 0 \end{bmatrix}
+,\quad \mathbf{\hat{b}} = \begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}
 ,\quad \mathbf{\hat{c}} = \begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}
+\label{eq:ms3}
 \end{equation}
 
 %The introduction ends with the “road-map” paragraph. This paragraph outlines the remaining sections of the paper. It can either give a general outline of the contribution,
@@ -167,18 +179,101 @@ Section 3 - Mathematical model of segmented rocket
 Section 4 - Class of systems to which WBC can be applied, and algorithm for converting to standard mass-spring form
 An algorithm is developed to find a suitable coordinate transformation $\mathbf{z} = P \mathbf{q}$ to achieve this objective.
 The problem may be first reduced to an inverse eigenvalue problem for a Jacobi matrix. This may be solved using the Lanczos algorithm as presented in \cite{gladwell1986inverse}. 
-It is found that there are many equivalent mass-spring systems depending on the desired forms of the input vector $\hat{\mathbf{b}}$ and output matrix $\hat{C}$, that is, on the input-output structure of the system or the location(s) of actuators and sensors in the string.
+It is found that there are many equivalent mass-spring systems depending on the desired forms of the input vector $\hat{\mathbf{b}}$ and output matrix $c$, that is, on the input-output structure of the system or the location(s) of actuators and sensors in the string.
 Section 5 - Numerical Examples - different position of sensors, actuators
 Section 6 - Discussion
 Section 7 - Conclusions 
 
-\section{Transformation to equivalent mass-spring model}
-This section outlines the process for converting
-We restrict ourselves to the case where the eigenvalues are real and distinct, i.e.
+\section{Equivalent Mass-Spring Models}
+This section outlines the procedure and conditions for converting a generic system described by equations \ref{eq:modal1}-\ref{eq:modal3} to a system described by equations \ref{eq:ms1}-\ref{eq:ms3}.
+This conversion amounts to finding the transformation matrix $P$ of equation \ref{eq:transform}.
+
+The coordinate transformation is carried out in three steps.
+First consider the transformation $\mathbf{v} = A \mathbf{q}$ where $A = diag\{a_1, a_2, ..., a_n\}$ is a diagonal matrix with strictly positive diagonal.
+This transformation merely scales the states of the system and leads to the new system:
+\begin{equation}
+\ddot{\mathbf{v}}(t) +  \Lambda \mathbf{v}(t) =  A^{-1} \mathbf{b}u(t)
+\label{eq:scaled1}
+\end{equation}
+\begin{equation}
+y(t) = \mathbf{c}^T  A \mathbf{v}(t)
+\label{eq:scaled2}
+\end{equation}
+
+In \cite{gladwell1986inverse} Gladwell investigates inverse eigenvalue problems for Jacobi matrices which are defined as follows:
+\begin{definition}
+A Jacobi matrix is a positive semi-definite symmetric tri-diagonal matrix with strictly negative co-diagonal.
+\end{definition}
+Two theorems concerning Jacobi matrices are repeated here without proof:
+\begin{theorem}
+The eigenvalues of a Jacobi matrix are \bf{distinct}.
+\label{the:jac1}
+\end{theorem}
+\begin{theorem}
+There is a unique Jacobi matrix $\mathbf{J}$ having specified eigenvalues $(\lambda_i)_1^n$, where
 \begin{equation}
 0 \leq \lambda_1<\lambda_2< \cdots <\lambda_n
 \label{eq:lambda}
 \end{equation}
+and with normalised eigenvectors $(\mathbf{u}_i)_1^n$  having non-zero specified values $(\mathbf{u}_{1i})_1^n$ or $(\mathbf{u}_{ni})_1^n$ of their first or last components respectively;
+recall that $\mathbf{u}_i = \begin{bmatrix} u_{1i} &  u_{2i} & \cdots & u_{ni} \end{bmatrix}^T$.
+\label{the:jac2}
+\end{theorem}
+To simplify notation let $U$ be the matrix whose columns are the eigenvectors $\mathbf{u}_i$ of the Jacobi matrix $J$ and $X = U^T$ be a matrix with columns $\mathbf{x}_i$.
+What Theorem \ref{the:jac2} says is that for a given $\Lambda$ and either $x_1$ or $x_n$ there is a unique Jacobi matrix $J$.
+Gladwell also presents an algorithm which given $\Lambda$ and $x_1$ or $x_n$ calculates matrices $J$ and $U$ such that $J U = U \Lambda$ (where $J$ is a Jacobi matrix and $U U^T = I$).
+Using this algorithm we can find the second transformation $\mathbf{z} = U \mathbf{v}$ which leads to the new system:
+\begin{equation}
+\ddot{\mathbf{z}}(t) + J \mathbf{z}(t) =   U A^{-1} \mathbf{b}u(t)
+\label{eq:jacobi1}
+\end{equation}
+\begin{equation}
+y(t) = \mathbf{c}^T  A U^T \mathbf{z}(t)
+\label{eq:jacobi2}
+\end{equation}
+Our first necessary condition for the transformation $P$ to exist is given by Equation \ref{eq:lambda}.
+
+The final step is to find the mass and stiffness matrices $M$ and $K$ such that $J =  M^{-\frac{1}{2}} K M^{-\frac{1}{2}}$ 
+Then the transformation $\mathbf{x} = M^{\frac{1}{2}} \mathbf{z}$ where $M$ has the form given in Equation \ref{eq:ms3} leads to the final system:
+\begin{equation}
+M \ddot{\mathbf{x}}(t) + K \mathbf{x}(t) = M^{\frac{1}{2}} U A^{-1} \mathbf{b} u(t)
+\label{eq:fin1}
+\end{equation}
+\begin{equation}
+y(t) = \mathbf{c}^T  A U^T M^{\frac{1}{2}}\mathbf{x}(t)
+\label{eq:fin2}
+\end{equation}
+By comparing this system to that of equations \ref{eq:ms1}-\ref{eq:ms3} we get the following equation for $\mathbf{b}$ and $\mathbf{c}$.
+\begin{equation}
+M^{\frac{1}{2}} U A^{-1} \mathbf{b} = M^{\frac{1}{2}} U A \mathbf{c} = \begin{bmatrix} 1 &  0 & \cdots & 0 \end{bmatrix}^T
+\label{eq:bhat}
+\end{equation}
+which can be simplified to
+\begin{equation}
+A^{-1} \mathbf{b} = A \mathbf{c} = \frac{1}{m_1} U^T \begin{bmatrix} 1 &  0 & \cdots & 0 \end{bmatrix}^T
+\label{eq:bc1}
+\end{equation}
+and then
+\begin{equation}
+A^{-1} \mathbf{b} = A \mathbf{c} = \frac{1}{m_1} \mathbf{x}_1
+\label{eq:bc2}
+\end{equation}
+This can be solved to give
+\begin{equation}
+a_i = \sqrt{\frac{b_i}{c_i}} ,\quad m_1 = \sqrt{\frac{1}{\sum b_i c_i}} ,\quad x_{i1} = \sqrt{\frac{b_i c_i}{\sum b_i c_i}}
+\label{eq:bcxm}
+\end{equation}
+By combining the three steps the overall transformation can be written as
+\begin{equation}
+P =  M^{-\frac{1}{2}} U A^{-1}
+\label{eq:p}
+\end{equation}
+Examining equation \ref{eq:bcxm} we find that a second necessary and sufficient condition for $P$ to exist is
+\begin{equation}
+\frac{b_i}{c_i} > 0 \quad \forall i
+\end{equation}
+
+\subsection{Algorithm}
 
 \section{Wave-Based Control Scheme}
 The details of the wave-based control scheme
@@ -198,7 +293,8 @@ The model consists of three rigid bodies connected by two torsional springs as s
 
 \begin{figure}[h]
   \begin{center}
-    \includegraphics[scale=1]{graphics/seg3-rocket-allact.pdf}
+    \input{graphics/seg3-rocket-allact.tex}
+    %\includegraphics[scale=1]{graphics/seg3-rocket-allact.pdf}
     \caption{Segmented planar rocket model \label{fig:rocket-model}}
   \end{center}
 \end{figure}
