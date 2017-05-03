@@ -21,8 +21,8 @@
 
 %Nodes
 	\node[pt]	at (0,0)	(ref)													{};
-	\node[block] 		(con) 		[right of=ref, node distance=3cm, align=center] 		{Wave-based \\ Controller};
-	\node[block] 		(act) 		[right of=con, node distance=3.5cm, align=center]  		{Actuator \\ Dynamics};
+	\node[block] 		(con) 		[right of=ref, node distance=2.5cm, align=center] 		{Wave-based \\ Controller};
+	\node[block] 		(act) 		[right of=con, node distance=3cm, align=center]  		{Actuator \\ Dynamics};
 	\node[pt]			(for)		[right of=act, node distance=1.5cm]							{};
 
 	
@@ -37,7 +37,7 @@
  	
 %Connections	
       \draw[force] (act) -- node {$f_0$} (m1);
- 	\draw[line] (ref) -- node {ref}  (con);
+ 	\draw[line] (ref) -- node {$r$}  (con);
  	\draw[line] (con) -- (act);
 	\draw[line] (m1) -- node[near start] {$x_1$} (int) -| (con.240);
 	\draw[line] (for) -- node[near start] {$f_0$} (int2) -| (con.300);
@@ -46,7 +46,7 @@
 	
 	\draw[spring] (m1) -- node[above] {$k_1$} (m2);
 	\draw[spring] (m2) -- node[above] {$k_2$} (pt1);
-	\draw[thick,gray, dashed] (pt1) -- (pt2);
+	\draw[thick, dashed] (pt1) -- (pt2);
 	\draw[spring] (pt2) -- node[above] {$k_3$} (m3);
 	%\draw[ground] (m1.south west) -- (m3.south east);
 

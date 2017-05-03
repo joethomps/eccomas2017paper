@@ -1,4 +1,5 @@
 \documentclass{mbd_fullpaper}
+%\documentclass{article}
 \usepackage{pgfplots}
 \usetikzlibrary{shapes,arrows,scopes,patterns,decorations.pathreplacing}
 
@@ -185,11 +186,12 @@ Section 6 - Discussion
 Section 7 - Conclusions 
 
 \section{Equivalent Mass-Spring Models}
-This section outlines the procedure and conditions for converting a generic system described by equations \ref{eq:modal1}-\ref{eq:modal3} to a system described by equations \ref{eq:ms1}-\ref{eq:ms3}.
+This section outlines a procedure for converting a generic SISO vibrating system described by equations \ref{eq:modal1}-\ref{eq:modal3} to an in-line mass-spring system described by equations \ref{eq:ms1}-\ref{eq:ms3}.
 This conversion amounts to finding the transformation matrix $P$ of equation \ref{eq:transform}.
-
 The coordinate transformation is carried out in three steps.
-First consider the transformation $\mathbf{v} = A \mathbf{q}$ where $A = diag\{a_1, a_2, ..., a_n\}$ is a diagonal matrix with strictly positive diagonal.
+
+\subsection{Step 1 - Scaling the States}
+First consider the transformation $\mathbf{v} = A \mathbf{q}$ where $A = diag(a_1, a_2, ..., a_n)$ is a diagonal matrix with strictly positive diagonal.
 This transformation merely scales the states of the system and leads to the new system:
 \begin{equation}
 \ddot{\mathbf{v}}(t) +  \Lambda \mathbf{v}(t) =  A^{-1} \mathbf{b}u(t)
@@ -199,29 +201,27 @@ This transformation merely scales the states of the system and leads to the new 
 y(t) = \mathbf{c}^T  A \mathbf{v}(t)
 \label{eq:scaled2}
 \end{equation}
+Here the input and output vectors $\mathbf{b}$ and $\mathbf{c}$ are changed however the matrix $\Lambda$ of eigenvalues is unaffected by the transformation.
+The choice of values $a_i$ is used to ensure that the after the last step the final input and output vectors of the mass-spring system $\mathbf{\hat{b}}$ and $\mathbf{\hat{c}}$ have the correct form.
+The required values of the $a_i$ are calculated in section \ref{sec:choiceai} to follow.
 
+\subsection{Step 2 - Inverse Eigenvalue Problem for Jacobi Matrix}
 In \cite{gladwell1986inverse} Gladwell investigates inverse eigenvalue problems for Jacobi matrices which are defined as follows:
-\begin{definition}
-A Jacobi matrix is a positive semi-definite symmetric tri-diagonal matrix with strictly negative co-diagonal.
-\end{definition}
-Two theorems concerning Jacobi matrices are repeated here without proof:
-\begin{theorem}
-The eigenvalues of a Jacobi matrix are \bf{distinct}.
-\label{the:jac1}
-\end{theorem}
-\begin{theorem}
-There is a unique Jacobi matrix $\mathbf{J}$ having specified eigenvalues $(\lambda_i)_1^n$, where
+a Jacobi matrix is a positive semi-definite symmetric tri-diagonal matrix with strictly negative co-diagonal.
+We make use of the following theorem: there is a unique Jacobi matrix $\mathbf{J}$ having specified eigenvalues $(\lambda_i)_1^n$, where
 \begin{equation}
 0 \leq \lambda_1<\lambda_2< \cdots <\lambda_n
 \label{eq:lambda}
 \end{equation}
-and with normalised eigenvectors $(\mathbf{u}_i)_1^n$  having non-zero specified values $(\mathbf{u}_{1i})_1^n$ or $(\mathbf{u}_{ni})_1^n$ of their first or last components respectively;
-recall that $\mathbf{u}_i = \begin{bmatrix} u_{1i} &  u_{2i} & \cdots & u_{ni} \end{bmatrix}^T$.
-\label{the:jac2}
-\end{theorem}
-To simplify notation let $U$ be the matrix whose columns are the eigenvectors $\mathbf{u}_i$ of the Jacobi matrix $J$ and $X = U^T$ be a matrix with columns $\mathbf{x}_i$.
-What Theorem \ref{the:jac2} says is that for a given $\Lambda$ and either $x_1$ or $x_n$ there is a unique Jacobi matrix $J$.
-Gladwell also presents an algorithm which given $\Lambda$ and $x_1$ or $x_n$ calculates matrices $J$ and $U$ such that $J U = U \Lambda$ (where $J$ is a Jacobi matrix and $U U^T = I$).
+and with normalised eigenvectors $(\mathbf{u}_i)_1^n$  having non-zero specified values $(u_{1i})_1^n$ of their first or components.
+Recall that $\mathbf{u}_i = \begin{bmatrix} u_{1i} &  u_{2i} & \cdots & u_{ni} \end{bmatrix}^T$.
+To simplify notation let $U$ be the matrix whose columns are the eigenvectors $\mathbf{u}_i$ of the Jacobi matrix $J$ and let $X$ be the transpose of this matrix with columns $\mathbf{x}_i$.
+Then
+\begin{equation}
+X=U^T
+\end{equation}
+and the above theorem says that for a given $\Lambda$ and $\mathbf{x_1}$ (the first column of $X$) there is a unique Jacobi matrix $J$.
+The Lanczos algorithm may be used to calculate matrices $J$ and $U$ ($X^T$) for a given $\Lambda$ and $\mathbf{x_1}$ such that $J U = U \Lambda$ (where $J$ is a Jacobi matrix and $U U^T = I$).
 Using this algorithm we can find the second transformation $\mathbf{z} = U \mathbf{v}$ which leads to the new system:
 \begin{equation}
 \ddot{\mathbf{z}}(t) + J \mathbf{z}(t) =   U A^{-1} \mathbf{b}u(t)
@@ -231,10 +231,11 @@ Using this algorithm we can find the second transformation $\mathbf{z} = U \math
 y(t) = \mathbf{c}^T  A U^T \mathbf{z}(t)
 \label{eq:jacobi2}
 \end{equation}
-Our first necessary condition for the transformation $P$ to exist is given by Equation \ref{eq:lambda}.
+Note that this transformation is only possible if Equation \ref{eq:lambda} holds.
 
-The final step is to find the mass and stiffness matrices $M$ and $K$ such that $J =  M^{-\frac{1}{2}} K M^{-\frac{1}{2}}$ 
-Then the transformation $\mathbf{x} = M^{\frac{1}{2}} \mathbf{z}$ where $M$ has the form given in Equation \ref{eq:ms3} leads to the final system:
+\subsection{Step 3 - Reconstruction of Mass and Stiffness Matrices}
+The final step is to reconstruct the mass and stiffness matrices $M$ and $K$.
+It can be shown that $J =  M^{-\frac{1}{2}} K M^{-\frac{1}{2}}$ and the transformation $\mathbf{x} = M^{\frac{1}{2}} \mathbf{z}$ where $M$ has the form given in Equation \ref{eq:ms3} leads to the final system:
 \begin{equation}
 M \ddot{\mathbf{x}}(t) + K \mathbf{x}(t) = M^{\frac{1}{2}} U A^{-1} \mathbf{b} u(t)
 \label{eq:fin1}
@@ -271,25 +272,21 @@ P =  M^{-\frac{1}{2}} U A^{-1}
 Examining equation \ref{eq:bcxm} we find that a second necessary and sufficient condition for $P$ to exist is
 \begin{equation}
 \frac{b_i}{c_i} > 0 \quad \forall i
+\label{eq:bc}
 \end{equation}
-
-\subsection{Algorithm}
-
-\section{Wave-Based Control Scheme}
-The details of the wave-based control scheme
-linear controller
-State space system
-tuning parameters w and k0
-choose w from k1 m1
+Also note that if
+\begin{equation}
+\frac{b_i}{c_i} < 0 \quad \forall i
+\end{equation}
+then we can simply consider the input to be $-u(t)$ instead of $u(t)$ so that $\mathbf{b}$ becomes $-\mathbf{b}$ and then equation \ref{eq:bc} will be satisfied.   
 
 \section{Mathematical Model of Segmented Rocket}
 In this section the equations of motion for a planar segmented rocket are presented.
-Why pick this model
 It should be noted that even though this is a lumped model with three bodies and two springs, the dynamics of this system are quite different from that of a simple rectilinear 3-mass, 2-spring system and the subtle differences, which will become clear in subsequent sections are what motivate the current study.
-Also note that from control point of view it is inputs and outputs that are important
+Also note that from control point of view it is inputs and outputs to the system that are important.
+When the input is a gimballed engine on the bottom segment and teh output is the angle of that segment
 When sensor is at top how can we apply WBC theory.
-
-The model consists of three rigid bodies connected by two torsional springs as shown in figure \ref{fig:rocket-model}.
+Also uniformity
 
 \begin{figure}[h]
   \begin{center}
@@ -298,32 +295,54 @@ The model consists of three rigid bodies connected by two torsional springs as s
     \caption{Segmented planar rocket model \label{fig:rocket-model}}
   \end{center}
 \end{figure}
+The model consists of three rigid bodies connected by two torsional springs as shown in figure \ref{fig:rocket-model}.
 The attitude of the bottom or base segment is $\theta$ relative to an inertial reference frame.
 The middle and top segments have angles $\phi_1$ and $\phi_2$ respectively between themselves and the segment below as shown.
 Each segment has has height $h$, mass $m$ and moment of inertia $I$ about its mass centre and each torsional spring has stiffness $k$.
-The rocket is considered to have four possible sources of actuation: a lateral force $f_i$ at the mass centre of each of the three segments, and a moment on the bottom segment as shown.
-This combination of inputs allow many different cases to be considered, for example if the actuator is a gimballed engine at the bottom then the input to the system will be a combination of force $f_1$ and moment $M$.
-The equations of motion of the system were derived using Kane's method \cite{Kane1980} and linearised about the equilibrium point $\theta=\dot{\theta}=\phi_i=\dot{\phi}_i=0$
-\begin{equation}
-\end{equation}
-where
+The rocket is considered to have four possible sources of actuation: a lateral forces $f_i$ at the top of each segment and an engine that may be gimballed by angle $\delta$ on the bottom segment as shown.
+This combination of inputs allow many different cases to be considered.
+Similarly the rocket has three outputs or attitude sensors, one on each segment which we will call $\alpha_1$, $\alpha_2$ and $\alpha_3$ respectively
+The rotational equations of motion of the system were derived using Kane's method \cite{Kane1980} and linearised about the equilibrium point $\theta=\dot{\theta}=\phi_i=\dot{\phi}_i=0$
 \begin{equation}
 \input{python/eqM.tex}
 \end{equation}
-Different actuators
-figure
+\begin{equation}
+y(t) = \mathbf{\hat{c}}^T \mathbf{x}(t)
+\end{equation}
 
 \section{Numerical Examples}
+
 Physical parameters vega
+\begin{table}[h]
+   \centering
+    \caption{Summary of model parameters representative of \emph{Vega} rocket \label{tab:modelparam}}
+    \vspace{0.3cm}
+   \begin{tabular}{@{} ccc @{}} 
+	\hline
+           Parameter & Value & Unit \\
+	\hline
+      	$m$ & $2105$ & $kg$\\
+      	$m_f$ & $88$ & $kg$\\
+      	$I$ & $1883$ & $kg~m^2$\\
+      	$a$ & $0.53$ & $m$\\
+     	$b$ & $-1.43$ & $m$\\
+     	$F$ & $2450$ & $N$\\
+      	$M_{max}$ & $931$ & $N~m$\\
+   \end{tabular}
+\end{table}
 Note: ignoring aerodynamics and gravity, for demonstration purposes only!
 Several models defined by different sensor actuator configs
 Conversion to equivalent mass-spring model
-1
-2
-3
-4
-Simulations
-Step responses
+Numerical version of equations above
+Signs
+Compatible actuators and sensors
+
+The details of the wave-based control scheme
+linear controller
+State space system
+tuning parameters w and k0
+choose w from k1 m1
+Example step responses
 
 \section{Discussion}
 Is conversion possible, when is possible
