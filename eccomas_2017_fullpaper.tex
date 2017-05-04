@@ -1,10 +1,10 @@
 \documentclass{mbd_fullpaper}
 %\documentclass{article}
+%\usepackage[a4paper]{geometry}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,amsbsy,amsmath}
 \usepackage{pgfplots}
+\usepackage{subfigure}
 \usetikzlibrary{shapes,arrows,scopes,patterns,decorations.pathreplacing}
-
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}{Definition}
 
 \begin{document}
 
@@ -73,7 +73,7 @@ Joseph W. Thompson
 %This model consists of three rigid bodies connected by two torsional springs and a gimballed rocket engine with constant thrust which may be used for attitude control.
 %Several test cases with different sensor and actuator configurations are examined and equivalent mass-spring systems are calculated in each case.
 
-\keywords{multibody spacecraft, attitude control, mechanical waves, vibration, lumped systems}
+%\keywords{multibody spacecraft, attitude control, mechanical waves, vibration, lumped systems}
 
 \section{Introduction}
 % The first paragraph should follow the inverted triangle principle: start with a broad statement and
@@ -317,7 +317,6 @@ The rotational equations of motion of the system were derived using Kane's metho
 \section{Examples}
 
 Physical parameters vega
-
 \renewcommand{\arraystretch}{1.5}
 \begin{table}[!ht]
   \begin{center}
@@ -336,7 +335,6 @@ Physical parameters vega
     \label{tab:tab1}
   \end{center}
 \end{table}
-
 %\begin{multline}
 %\input{python/eqnum.tex}
 %\end{multline}
@@ -388,9 +386,18 @@ tuning parameters w and k0
 choose w from k1 m1
 Example step responses
 
+\begin{figure}[h]
+  \begin{center}
+    \subfigure{\input{graphics/graphdel.tex} \label{fig:graphdel}}   
+    \subfigure{\input{graphics/graphf2.tex} \label{fig:graphf2}}
+	\subfigure{\input{graphics/graphf3.tex} \label{fig:graphf3}}
+    \caption{Step responses for a simple wave-based control system for each choice of actuator and sensor \label{fig:graphs}}
+  \end{center}
+\end{figure}
+
 \section{Discussion}
 Is conversion possible, when is possible
-Still a large class of systems
+Still a \ref{fig:graphdel} large class of systems
 
 Mass Spring ratios, uniformity better
 for that rocket model sensor at bottom is better
