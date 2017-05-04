@@ -221,7 +221,11 @@ Then
 X=U^T
 \end{equation}
 and the above theorem says that for a given $\Lambda$ and $\mathbf{x_1}$ (the first column of $X$) there is a unique Jacobi matrix $J$.
-The Lanczos algorithm may be used to calculate matrices $J$ and $U$ ($X^T$) for a given $\Lambda$ and $\mathbf{x_1}$ such that $J U = U \Lambda$ (where $J$ is a Jacobi matrix and $U U^T = I$).
+The Lanczos algorithm may be used to calculate matrices $J$ and $U$ ($X^T$) for a given $\Lambda$ and $\mathbf{x_1}$ such that 
+\begin{equation}
+J U = U \Lambda
+\end{equation}
+(where $J$ is a Jacobi matrix and $U U^T = I$).
 Using this algorithm we can find the second transformation $\mathbf{z} = U \mathbf{v}$ which leads to the new system:
 \begin{equation}
 \ddot{\mathbf{z}}(t) + J \mathbf{z}(t) =   U A^{-1} \mathbf{b}u(t)
@@ -303,33 +307,57 @@ The rocket is considered to have four possible sources of actuation: a lateral f
 This combination of inputs allow many different cases to be considered.
 Similarly the rocket has three outputs or attitude sensors, one on each segment which we will call $\alpha_1$, $\alpha_2$ and $\alpha_3$ respectively
 The rotational equations of motion of the system were derived using Kane's method \cite{Kane1980} and linearised about the equilibrium point $\theta=\dot{\theta}=\phi_i=\dot{\phi}_i=0$
+\begin{multline}
+\input{python/eq1.tex}
+\end{multline}
 \begin{equation}
-\input{python/eqM.tex}
-\end{equation}
-\begin{equation}
-y(t) = \mathbf{\hat{c}}^T \mathbf{x}(t)
+\input{python/eq2.tex}
 \end{equation}
 
-\section{Numerical Examples}
+\section{Examples}
 
 Physical parameters vega
-\begin{table}[h]
-   \centering
+
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[!ht]
+  \begin{center}
     \caption{Summary of model parameters representative of \emph{Vega} rocket \label{tab:modelparam}}
-    \vspace{0.3cm}
-   \begin{tabular}{@{} ccc @{}} 
+    \vspace{1mm}
+    \begin{tabular}{ ccc }
 	\hline
            Parameter & Value & Unit \\
 	\hline
-      	$m$ & $2105$ & $kg$\\
-      	$m_f$ & $88$ & $kg$\\
-      	$I$ & $1883$ & $kg~m^2$\\
-      	$a$ & $0.53$ & $m$\\
-     	$b$ & $-1.43$ & $m$\\
-     	$F$ & $2450$ & $N$\\
-      	$M_{max}$ & $931$ & $N~m$\\
-   \end{tabular}
+      	$m$ & $5 \cdot 10^4$ & $kg$\\
+      	$k$ & $6 \cdot 10^7$ & $Nm$\\
+      	$I$ & $5 \cdot 10^5$ & $kg~m^2$\\
+      	$h$ & $10$ & $m$\\
+      	$T$ & $2.3 \cdot 10^6$ & $N$\\
+    \end{tabular}
+    \label{tab:tab1}
+  \end{center}
 \end{table}
+
+%\begin{multline}
+%\input{python/eqnum.tex}
+%\end{multline}
+\begin{multline}
+\input{python/eqdiag1.tex}
+\end{multline}
+\begin{equation}
+\input{python/eqdiag2.tex}
+\end{equation}
+%\begin{equation}
+%\input{python/eqtrans.tex}
+%\end{equation}
+
+\begin{figure}[h]
+  \begin{center}
+    \input{graphics/rocket-trans.tex}
+    \caption{Segmented planar rocket model \label{fig:rocket-model}}
+  \end{center}
+\end{figure}
+
+
 Note: ignoring aerodynamics and gravity, for demonstration purposes only!
 Several models defined by different sensor actuator configs
 Conversion to equivalent mass-spring model

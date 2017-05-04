@@ -35,7 +35,7 @@
 	\draw[axis,-]  (-\w/2,0) -- (-\w,0);
 	\draw[draw=gray,->,] (-\w,\h) node[below]{$\phi_2$} arc (180:180+\phit:\w);
 	\draw[force,->] (\w,\h)  node[right]{$f_2$}  -- (\w/2,\h);
-	\draw [domain=0:12.56,variable=\t,smooth,samples=75] plot ({\t r}: {0.010*\t});
+	\draw [domain=0:12.56,variable=\t,smooth,samples=75] plot ({\t r}: {0.020*\t});
 	\draw[draw=gray,<->,] (-0.75*\w,0)  -- node[left]{$h$} (-0.75*\w,\h);
 	
 	\begin{scope}[yshift=\h, rotate=\phit]
@@ -43,7 +43,7 @@
 	\draw[] (-\w/2,0) -- (-\w/2,3*\h/4) -- (-\w/4,\h) -- (\w/4,\h) -- (\w/2,3*\h/4) -- (\w/2,0) --  (-\w/2,0) ;
 	\node[cog] at (0,\h/2) {};	
 	\draw[force,->] (3*\w/4,\h)  node[right]{$f_3$}  -- (\w/4,\h);
-	\draw [domain=0:12.56,variable=\t,smooth,samples=75] plot ({\t r}: {0.010*\t});
+	\draw [domain=0:12.56,variable=\t,smooth,samples=75] plot ({\t r}: {0.020*\t});
 	
 	\end{scope}
 	\end{scope}
