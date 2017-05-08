@@ -3,6 +3,7 @@
 %\usepackage[a4paper]{geometry}
 \usepackage{amsmath,amsfonts,amssymb,amsthm,amsbsy,amsmath}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.11} 
 \usepackage{subfigure}
 \usetikzlibrary{shapes,arrows,scopes,patterns,decorations.pathreplacing}
 
@@ -20,7 +21,7 @@
 
 \renewcommand{\refname}{\medskip\bf\large References}
 
-
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 
 %------------------------------------------------------------
 % title
@@ -73,25 +74,24 @@ Joseph W. Thompson
 %This model consists of three rigid bodies connected by two torsional springs and a gimballed rocket engine with constant thrust which may be used for attitude control.
 %Several test cases with different sensor and actuator configurations are examined and equivalent mass-spring systems are calculated in each case.
 
-%\keywords{multibody spacecraft, attitude control, mechanical waves, vibration, lumped systems}
+\keywords{multibody spacecraft, attitude control, mechanical waves, vibration, lumped systems}
 
 \section{Introduction}
 % The first paragraph should follow the inverted triangle principle: start with a broad statement and
 % become more detailed until finally identifying the specific problem that the paper addresses.
-Many spacecraft and rockets may be modelled as multi-body systems \cite{kane}.
-Flexible structures such as solar panels, or robot arms, may be approximated by a lumped equivalent - a number of joined rigid bodies, with springs in each joint.
-Sloshing fuel may be represented by a simple pendulum or a mass-spring analog.
-These simple representations are particularly useful in the design of an attitude controller.
-These systems are usually under-actuated i.e. have more degrees of freedom than actuators.
+Many spacecraft and rockets may be modelled as multi-body systems \cite{Kane1980}.
+Flexible structures such as solar panels, or robot arms, may be approximated by a lumped equivalent: a number of connected rigid bodies, with springs in between.
+Sloshing fuel may be represented by a simple pendulum or mass-spring analog.
+These simple representations are particularly useful in the design of attitude controllers.
+Such systems are usually under-actuated i.e. have more degrees of freedom than actuators.
 In attempting to re-orient such a system, one will usually excite certain modes of vibration.
-To bring the system back to rest, the control algorithm must effectively dampen these vibrations.
-To end up with the correct target attitude at the end of a manoeuvre this exciting and damping of vibrations must be done in precisely the right way.
+In bringing the system back to rest, the control algorithm must effectively dampen these vibrations.
+To end up with the correct target attitude at the end of a manoeuvre the exciting and damping of vibrations must be done in precisely the right way.
 One possible approach to this problem is to model the motion of each part of the system as a superposition of two components or `waves'.
-One wave is travelling from the actuator into the system and the other is travelling from the system back towards the actuator.
-In this way the actuator is simultaneously launching a wave into the system and absorbing a returning wave from the system.
-A complete manoeuvre consists of launching a certain wave into the system and then absorbing the returning wave to bring the system back to rest.
-The above wave-based control technique has been applied successfully to uniform and non-uniform rectilinear mass-spring systems.
-The aim of this paper is to extend the wave-based control theory to a wider class of systems, namely the multi-body spacecraft described above. 
+Using this wave-based interpretation of the system, linear controllers have been designed with a number of desirable properties \cite{Connor2005}. 
+These include robustness to modelling errors, system changes, sensor delays and non-ideal actuation, minimal sensing and ease of implementation.
+Wave-based control (WBC) as described above, has been applied successfully to uniform and non-uniform in-line mass-spring systems.
+The aim of this paper is to extend the WBC theory to a wider class of systems, namely the multi-body spacecraft described above. 
 
 \begin{figure}[h]
   \begin{center}
@@ -100,20 +100,22 @@ The aim of this paper is to extend the wave-based control theory to a wider clas
 	\caption{Wave-based control scheme for a mass-spring string \label{fig:wave-based-control}}
   \end{center}
 \end{figure}
-Figure \ref{fig:wave-based-control} shows a simple wave-based control system.
-The generic mass-spring string shown is a classical example of an under-actuated control problem.
+Figure \ref{fig:wave-based-control} shows a simple WBC control system.
+The generic in-line mass-spring system shown is a classical example of an under-actuated control problem.
 The motion of this lumped system may be modelled as a superposition of two "waves" or wave-like components travelling rightwards and leftwards \cite{OConnor2011}.
-Using this wave-based interpretation of the system, linear controllers have been designed with a number of desirable properties \cite{Connor2005}. 
-These include robustness to modelling errors, system changes, sensor delays and non-ideal actuation, minimal sensing and ease of implementation.
-These controllers operate as follows: The initial movement of the actuator $x_0$ launches a wave (motion which propagates rightwards through the string) which reaches the system boundary and is reflected.
-After reflection the motion (returning wave) travels leftwards back to the actuator which moves to absorb it.
+One wave is travelling from the actuator into the system and the other is travelling from the system back towards the actuator.
+In this way the actuator is simultaneously launching a wave into the system and absorbing a returning wave from the system.
+A complete manoeuvre consists of launching a certain wave into the system,
+allowing it to reach the boundary of the system (right-hand end) where it is reflected,
+and the motion (returning wave) travels leftwards back to the actuator which moves to absorb it and bring the system back to rest.
 This returning wave is resolved using two measurements from the system.
 These measurements can be positions, velocities or forces and are usually taken close to the actuator.
 In Figure \ref{fig:wave-based-control} these measurements are the position of the first mass $x_1$ and the force being applied to the first mass $f_0$.
-In addition to the mass-spring shown in Figure \ref{fig:wave-based-control} this type of controller has been applied to a much wider array of systems. (citations)
+In addition to the mass-spring system shown in Figure \ref{fig:wave-based-control} this type of controller has been applied to a much wider array of systems. (citations)
 However in these cases the approach to controller design and tuning has been experimental in nature and the underlying waves are not clearly defined.
 It is proposed here that many of these more complicated systems are in fact similar in structure to the mass-spring system in Figure \ref{fig:wave-based-control}.
-Furthermore it is proposed that through a suitable change of coordinates, an equivalent mass-spring string may be calculated for many of these systems.
+Furthermore it is proposed that through a suitable change of coordinates, an equivalent in-line mass-spring system may be calculated for many of these systems.
+
 Given a SISO (single-input single-output) undamped system described by:
 \begin{equation}
 \ddot{\mathbf{q}}(t) + \Lambda\mathbf{q}(t) = \mathbf{b}u(t)
@@ -153,7 +155,7 @@ M\ddot{\mathbf{x}}(t) + K\mathbf{x}(t) = \mathbf{\hat{b}}u(t)
 y(t) = \mathbf{\hat{c}}^T \mathbf{x}(t)
 \label{eq:ms2}
 \end{equation}
-and $M$, $K$, $\mathbf{\hat{b}}$ and $\mathbf{\hat{c}}$ have the following structure:
+where $M$, $K$, $\mathbf{\hat{b}}$ and $\mathbf{\hat{c}}$ have the following structure:
 \begin{equation}
 M = \begin{bmatrix}
 m_1  &  0 & \cdots & 0 \\
@@ -174,23 +176,26 @@ k_1+k_2  &  -k_2 & 0 & \cdots & 0 \\
 
 %The introduction ends with the “road-map” paragraph. This paragraph outlines the remaining sections of the paper. It can either give a general outline of the contribution,
 %or a specific, section-by-section breakdown of the remaining article.
-Road map
-Section 2 - WBC control system
-Section 3 - Mathematical model of segmented rocket
-Section 4 - Class of systems to which WBC can be applied, and algorithm for converting to standard mass-spring form
-An algorithm is developed to find a suitable coordinate transformation $\mathbf{z} = P \mathbf{q}$ to achieve this objective.
-The problem may be first reduced to an inverse eigenvalue problem for a Jacobi matrix. This may be solved using the Lanczos algorithm as presented in \cite{gladwell1986inverse}. 
-It is found that there are many equivalent mass-spring systems depending on the desired forms of the input vector $\hat{\mathbf{b}}$ and output matrix $c$, that is, on the input-output structure of the system or the location(s) of actuators and sensors in the string.
-Section 5 - Numerical Examples - different position of sensors, actuators
-Section 6 - Discussion
-Section 7 - Conclusions 
+%% Road Map
+Section \ref{sec:algorithms} presents a procedure for calculating the transformation $P$ of equation \ref{eq:transform}.
+The problem may be first reduced to an inverse eigenvalue problem for a Jacobi matrix.
+This is then solved using the Lanczos algorithm and finally mass and stiffness matrices are reconstructed.
+Some conditions are found for the transformation to be possible.
+%%
+Section \ref{sec:math-model} presents a mathematical model of a multibody flexible rocket which will be used as an example to test the algorithms presented in section \ref{sec:algorithms}.
+Linearised equations of motion are presented for the system.
+Section \ref{sec:num-examples} presents some numerical examples of transformations for the rocket model.
+Numerical parameters are chosen for the model to represent the European rocket \emph{Vega}.
+It is found that there are many equivalent mass-spring systems depending on the locations of actuators and sensors on the rocket and some different examples are considered.
+Sections \ref{sec:discussion} and \ref{sec:conclusions} present discussion and conclusions respectively.
 
 \section{Equivalent Mass-Spring Models}
+\label{sec:algorithms}
 This section outlines a procedure for converting a generic SISO vibrating system described by equations \ref{eq:modal1}-\ref{eq:modal3} to an in-line mass-spring system described by equations \ref{eq:ms1}-\ref{eq:ms3}.
 This conversion amounts to finding the transformation matrix $P$ of equation \ref{eq:transform}.
 The coordinate transformation is carried out in three steps.
 
-\subsection{Step 1 - Scaling the States}
+\subsection{Scaling the States of the System}
 First consider the transformation $\mathbf{v} = A \mathbf{q}$ where $A = diag(a_1, a_2, ..., a_n)$ is a diagonal matrix with strictly positive diagonal.
 This transformation merely scales the states of the system and leads to the new system:
 \begin{equation}
@@ -202,33 +207,76 @@ y(t) = \mathbf{c}^T  A \mathbf{v}(t)
 \label{eq:scaled2}
 \end{equation}
 Here the input and output vectors $\mathbf{b}$ and $\mathbf{c}$ are changed however the matrix $\Lambda$ of eigenvalues is unaffected by the transformation.
-The choice of values $a_i$ is used to ensure that the after the last step the final input and output vectors of the mass-spring system $\mathbf{\hat{b}}$ and $\mathbf{\hat{c}}$ have the correct form.
-The required values of the $a_i$ are calculated in section \ref{sec:choiceai} to follow.
+The choice of values $a_i$ are used to achieve the correct form of the input and output $\mathbf{\hat{b}}$ and $\mathbf{\hat{c}}$ vectors of the mass-spring system after the final step.
+The values of the $a_i$ are calculated in section \ref{sec:choiceai} below.
 
-\subsection{Step 2 - Inverse Eigenvalue Problem for Jacobi Matrix}
+\subsection{Inverse Eigenvalue Problem for Jacobi Matrix and Lanczos Algorithm}
 In \cite{gladwell1986inverse} Gladwell investigates inverse eigenvalue problems for Jacobi matrices which are defined as follows:
 a Jacobi matrix is a positive semi-definite symmetric tri-diagonal matrix with strictly negative co-diagonal.
-We make use of the following theorem: there is a unique Jacobi matrix $\mathbf{J}$ having specified eigenvalues $(\lambda_i)_1^n$, where
+We make use of the following theorem for Jacobi matrices:
+
+There is a unique Jacobi matrix $\mathbf{J}$ having specified eigenvalues $(\lambda_i)_1^n$, where
 \begin{equation}
 0 \leq \lambda_1<\lambda_2< \cdots <\lambda_n
 \label{eq:lambda}
 \end{equation}
-and with normalised eigenvectors $(\mathbf{u}_i)_1^n$  having non-zero specified values $(u_{1i})_1^n$ of their first or components.
+and with normalised eigenvectors $(\mathbf{u}_i)_1^n$  having non-zero specified values $(u_{1i})_1^n$ of their first components.
 Recall that $\mathbf{u}_i = \begin{bmatrix} u_{1i} &  u_{2i} & \cdots & u_{ni} \end{bmatrix}^T$.
-To simplify notation let $U$ be the matrix whose columns are the eigenvectors $\mathbf{u}_i$ of the Jacobi matrix $J$ and let $X$ be the transpose of this matrix with columns $\mathbf{x}_i$.
-Then
-\begin{equation}
-X=U^T
-\end{equation}
-and the above theorem says that for a given $\Lambda$ and $\mathbf{x_1}$ (the first column of $X$) there is a unique Jacobi matrix $J$.
-The Lanczos algorithm may be used to calculate matrices $J$ and $U$ ($X^T$) for a given $\Lambda$ and $\mathbf{x_1}$ such that 
+
+To simplify notation let $U$ be the orthogonal matrix whose columns are the eigenvectors $\mathbf{u}_i$ of the Jacobi matrix $J$ and let $X$ be the transpose of $U$ with columns $\mathbf{x}_i$.
+Then the above theorem says that for a given $\Lambda$ and $\mathbf{x_1}$ (the first column of $X$) there is a unique Jacobi matrix $J$ and orthogonal matrix $U$.
+The Lanczos algorithm may be used to calculate the matrices $J$ and $U$ ($X^T$) for a given $\Lambda$ and $\mathbf{x_1}$ such that 
 \begin{equation}
 J U = U \Lambda
 \end{equation}
-(where $J$ is a Jacobi matrix and $U U^T = I$).
+This may be rewritten in terms of $X$ as
+\begin{equation}
+X J = \Lambda X
+\label{eq:lanczos}
+\end{equation}
+The Lanczos algorithm works as follows.
+Equation \ref{eq:lanczos} may be expanded as
+\begin{equation}
+\begin{bmatrix} \mathbf{x_1} &  \mathbf{x_2} & \cdots & \mathbf{x_n} \end{bmatrix}
+\begin{bmatrix} d_1  &  -e_1 & 0 & \cdots & 0 \\
+-e_1 & d_2  & -e_2 & \ddots & 0 \\
+0 & -e_2 & \ddots & \ddots & \vdots \\
+\vdots & \ddots & \ddots & d_{n-1} & -e_{n-1} \\
+0 & 0 & \cdots & -e_{n-1} & d_n \end{bmatrix}
+=
+\Lambda
+\begin{bmatrix} \mathbf{x_1} &  \mathbf{x_2} & \cdots & \mathbf{x_n} \end{bmatrix}
+\end{equation}
+Taking this column by column, first we have
+\begin{equation}
+d_1 \mathbf{x_1} - e_1 \mathbf{x_2} = \lambda_1 \mathbf{x_1}
+\label{eq:lanc1}
+\end{equation}
+If we pre-multiply by $\mathbf{x_1^T}$, using $\mathbf{x_1^T} \mathbf{x_1}=1$ and $\mathbf{x_1^T} \mathbf{x_2}=0$ we get
+\begin{equation}
+d_1 = \mathbf{x_1^T} \Lambda \mathbf{x_1}
+\label{eq:lanc2} 
+\end{equation}
+Then rewriting equation \ref{eq:lanc1} as
+\begin{equation}
+e_1 \mathbf{x_2} = d_1 \mathbf{x_1} - \lambda_1 \mathbf{x_1} = \mathbf{\hat{x}_2}
+\label{eq:lanc3}
+\end{equation}
+The vector $\mathbf{z_2}$ is may be calculated from $d_1$, $\mathbf{x_1}$ and $\Lambda$ and since $\mathbf{x_2}$ is a unit vector $e_1$ may be calculated from
+\begin{equation}
+e_1 = \norm{\mathbf{\hat{x}_2}}
+\label{eq:lanc4}
+\end{equation}
+and then
+\begin{equation}
+\mathbf{x_2} = \frac{\mathbf{\hat{x}_2}}{e_1}
+\label{eq:lanc5}
+\end{equation}
+This procedure of equations \ref{eq:lanc1} to \ref{eq:lanc5} may be repeated for each column of the equation calculating all the $d_i$, $e_i$ and $\mathbf{x_i}$.
+
 Using this algorithm we can find the second transformation $\mathbf{z} = U \mathbf{v}$ which leads to the new system:
 \begin{equation}
-\ddot{\mathbf{z}}(t) + J \mathbf{z}(t) =   U A^{-1} \mathbf{b}u(t)
+\ddot{\mathbf{z}}(t) + J \mathbf{z}(t) =   U A^{-1} \mathbf{b} u(t)
 \label{eq:jacobi1}
 \end{equation}
 \begin{equation}
@@ -237,7 +285,8 @@ y(t) = \mathbf{c}^T  A U^T \mathbf{z}(t)
 \end{equation}
 Note that this transformation is only possible if Equation \ref{eq:lambda} holds.
 
-\subsection{Step 3 - Reconstruction of Mass and Stiffness Matrices}
+\subsection{Reconstruction of Mass and Stiffness Matrices}
+\label{sec:choiceai}
 The final step is to reconstruct the mass and stiffness matrices $M$ and $K$.
 It can be shown that $J =  M^{-\frac{1}{2}} K M^{-\frac{1}{2}}$ and the transformation $\mathbf{x} = M^{\frac{1}{2}} \mathbf{z}$ where $M$ has the form given in Equation \ref{eq:ms3} leads to the final system:
 \begin{equation}
@@ -248,6 +297,9 @@ M \ddot{\mathbf{x}}(t) + K \mathbf{x}(t) = M^{\frac{1}{2}} U A^{-1} \mathbf{b} u
 y(t) = \mathbf{c}^T  A U^T M^{\frac{1}{2}}\mathbf{x}(t)
 \label{eq:fin2}
 \end{equation}
+
+More details of the algorithm used to be included here!!
+
 By comparing this system to that of equations \ref{eq:ms1}-\ref{eq:ms3} we get the following equation for $\mathbf{b}$ and $\mathbf{c}$.
 \begin{equation}
 M^{\frac{1}{2}} U A^{-1} \mathbf{b} = M^{\frac{1}{2}} U A \mathbf{c} = \begin{bmatrix} 1 &  0 & \cdots & 0 \end{bmatrix}^T
@@ -276,21 +328,24 @@ P =  M^{-\frac{1}{2}} U A^{-1}
 Examining equation \ref{eq:bcxm} we find that a second necessary and sufficient condition for $P$ to exist is
 \begin{equation}
 \frac{b_i}{c_i} > 0 \quad \forall i
-\label{eq:bc}
+\label{eq:bc1}
 \end{equation}
-Also note that if
+Also note however that if
 \begin{equation}
 \frac{b_i}{c_i} < 0 \quad \forall i
+\label{eq:bc2}
 \end{equation}
-then we can simply consider the input to be $-u(t)$ instead of $u(t)$ so that $\mathbf{b}$ becomes $-\mathbf{b}$ and then equation \ref{eq:bc} will be satisfied.   
+then we can write down a new system by changing the signs of both $u(t)$ and $\mathbf{b}$. We then have a new system identical to the old system but where the input is $-u(t)$ and equation \ref{eq:bc} is satisfied.
+This condition may be summarized as: the signs of corresponding entries in the $\mathbf{b}$ and $\mathbf{c}$ vectors must be either all the same or all different.
 
 \section{Mathematical Model of Segmented Rocket}
+\label{sec:math-model}
 In this section the equations of motion for a planar segmented rocket are presented.
-It should be noted that even though this is a lumped model with three bodies and two springs, the dynamics of this system are quite different from that of a simple rectilinear 3-mass, 2-spring system and the subtle differences, which will become clear in subsequent sections are what motivate the current study.
-Also note that from control point of view it is inputs and outputs to the system that are important.
-When the input is a gimballed engine on the bottom segment and teh output is the angle of that segment
-When sensor is at top how can we apply WBC theory.
-Also uniformity
+It should be noted that even though this is a lumped model with three bodies and two springs, it is quite different from a simple uniform rectilinear 3-mass, 2-spring system and the subtle differences, which will become clear in subsequent sections are what motivate the current study.
+When looking at this system from a control point of view it is inputs and outputs to the system that are important.
+In the mass-spring system of figure \ref{fig:wave-based-control} the input and output are the force on the first mass and position of the first mass respectively and that is the arrangement we want in order to apply wave-based control.
+When the input is a gimballed engine on the bottom segment and the output is the angle of the bottom segment then the system is indeed similar to 3-mass, 2-spring system.
+However, even though the segments have equal moments of inertia and masses, the resulting mass-spring system, as will be seen below, is not uniform and it is not obvious on inspection what the values of the masses and springs should be.
 
 \begin{figure}[h]
   \begin{center}
@@ -299,14 +354,16 @@ Also uniformity
     \caption{Segmented planar rocket model \label{fig:rocket-model}}
   \end{center}
 \end{figure}
-The model consists of three rigid bodies connected by two torsional springs as shown in figure \ref{fig:rocket-model}.
+The model, shown in figure \ref{fig:rocket-model}, consists of three rigid bodies connected by two torsional springs as shown in figure \ref{fig:rocket-model}.
 The attitude of the bottom or base segment is $\theta$ relative to an inertial reference frame.
 The middle and top segments have angles $\phi_1$ and $\phi_2$ respectively between themselves and the segment below as shown.
 Each segment has has height $h$, mass $m$ and moment of inertia $I$ about its mass centre and each torsional spring has stiffness $k$.
 The rocket is considered to have four possible sources of actuation: a lateral forces $f_i$ at the top of each segment and an engine that may be gimballed by angle $\delta$ on the bottom segment as shown.
 This combination of inputs allow many different cases to be considered.
 Similarly the rocket has three outputs or attitude sensors, one on each segment which we will call $\alpha_1$, $\alpha_2$ and $\alpha_3$ respectively
-The rotational equations of motion of the system were derived using Kane's method \cite{Kane1980} and linearised about the equilibrium point $\theta=\dot{\theta}=\phi_i=\dot{\phi}_i=0$
+The rotational equations of motion of the system were derived using Kane's method \cite{Kane1980} and linearised about the equilibrium point $\theta=\dot{\theta}=\phi_i=\dot{\phi}_i=0$.
+It should be noted that aerodynamic effects are ignored in this model.
+This is justified in that the model is to be used for demonstration of the technique only or it may be considered only for the latter part of the rockets flight where atmospheric effects become less.
 \begin{multline}
 \input{python/eq1.tex}
 \end{multline}
@@ -315,8 +372,9 @@ The rotational equations of motion of the system were derived using Kane's metho
 \end{equation}
 
 \section{Examples}
+\label{sec:num-examples}
 
-Physical parameters vega
+Table \ref{tab:modelparam} presents numerical parameters for the model presented in section \ref{sec:math-model} which are representative of the European launcher \emph{Vega} \cite{}.
 \renewcommand{\arraystretch}{1.5}
 \begin{table}[!ht]
   \begin{center}
@@ -332,33 +390,38 @@ Physical parameters vega
       	$h$ & $10$ & $m$\\
       	$T$ & $2.3 \cdot 10^6$ & $N$\\
     \end{tabular}
-    \label{tab:tab1}
   \end{center}
 \end{table}
 %\begin{multline}
 %\input{python/eqnum.tex}
 %\end{multline}
+These values were substituted into the rocket equations of motion and then the system was diagonalised to have the same structure as equations \ref{eq:modal1} to \ref{eq:modal3}.
 \begin{multline}
 \input{python/eqdiag1.tex}
+\label{eq:num_rock1}
 \end{multline}
 \begin{equation}
 \input{python/eqdiag2.tex}
+\label{eq:num_rock2}
 \end{equation}
 %\begin{equation}
 %\input{python/eqtrans.tex}
 %\end{equation}
-
+These equations actually represent twelve possible SISO systems using the four possible actuators (represented by the columns of $\mathbf{b}$) and three possible sensors (represented by the rows of $\mathbf{c}$).
+By examining the sign patterns of the input and output matrices, we find that there are only three combinations which satisfy the sign conditions of equations \ref{eq:bc1} and \ref{eq:bc2}.
+These are ($\delta$, $\alpha_1$), ($f_2$, $\alpha_2$) and ($f_3$, $\alpha_3$).
+The algorithms described in section \ref{sec:algorithms} were used to calculate the equivalent mass-spring system for each of these cases.
+Figure \ref{fig:rocket-trans} shows these equivalent systems and table \ref{tab:equiv_vals} summarizes the equivalent mass and spring values.
 \begin{figure}[h]
   \begin{center}
     \input{graphics/rocket-trans.tex}
-    \caption{Segmented planar rocket model \label{fig:rocket-model}}
+    \caption{Equivalent mass-spring systems for three different actuator-sensor combinations \label{fig:rocket-trans}}
   \end{center}
 \end{figure}
-
 \renewcommand{\arraystretch}{1.5}
 \begin{table}[!ht]
   \begin{center}
-    \caption{Summary of model parameters representative of \emph{Vega} rocket \label{tab:modelparam}}
+    \caption{Equivalent mass and spring values for three different actuator-sensor combinations \label{tab:equiv_vals}}
     \vspace{1mm}
     \begin{tabular}{ ccccccc }
 	\hline
@@ -368,25 +431,19 @@ Physical parameters vega
       	$f_2$ & $\alpha_2$ & $0.243\cdot 10^6$ & $2.11\cdot 10^6$ & $0.0965\cdot 10^6$ & $6.71\cdot 10^7$ & $0.568\cdot 10^7$ \\
       	$f_3$ & $\alpha_3$ & $1.29\cdot 10^5$ & $1.55\cdot 10^5$ & $4.38\cdot 10^5$ & $1.83\cdot 10^7$ & $1.25\cdot 10^7$ \\
     \end{tabular}
-    \label{tab:tab1}
   \end{center}
 \end{table}
 
-Note: ignoring aerodynamics and gravity, for demonstration purposes only!
-Several models defined by different sensor actuator configs
-Conversion to equivalent mass-spring model
-Numerical version of equations above
-Signs
-Compatible actuators and sensors
-
+\subsection{WBC Step Responses}
 The details of the wave-based control scheme
-linear controller
-State space system
-tuning parameters w and k0
-choose w from k1 m1
-Example step responses
 
-\begin{figure}[h]
+tuning parameters w and k0
+
+calculated from k1 and m1 in each case
+
+Step responses for each case
+
+\begin{figure}[H]
   \begin{center}
     \subfigure{\input{graphics/graphdel.tex} \label{fig:graphdel}}   
     \subfigure{\input{graphics/graphf2.tex} \label{fig:graphf2}}
@@ -396,17 +453,27 @@ Example step responses
 \end{figure}
 
 \section{Discussion}
-Is conversion possible, when is possible
-Still a \ref{fig:graphdel} large class of systems
-
-Mass Spring ratios, uniformity better
-for that rocket model sensor at bottom is better
-Wave-based intuition behind this. Longer settling time for actuator at top
-System tells us best location for actuator
-Future work, use this to optimise actuator and sensor location
+\label{sec:discussion}
+%Conditions
+%Still a large class of systems
+%Mass Spring ratios, uniformity better
+%Wave-based intuition behind this. Longer settling time for actuator at top
+%Future work, use this to optimise actuator and sensor location
 
 \section{Conclusions}
+\label{sec:conclusions}
 
+Presented procedure for calculating an equivalent mass-spring system with actuator and sensor at one end.
+
+Established the necessary and sufficient conditions for the transformation to be possible
+
+Derived equations of motion for a segmented multibody rocket with twelve possible actuator-sensor configurations
+
+Using conditions and algorithms produced equivalent systems for three of these
+
+Applied WBC to each
+
+Non-Uniformity
 
 %------------------------------------------------------------
 % biliography
