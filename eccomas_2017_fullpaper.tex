@@ -111,7 +111,7 @@ This returning wave is resolved using two measurements from the system.
 These measurements can be positions, velocities or forces and are usually taken close to the actuator. 
 
 In Fig. \ref{fig:wave-based-control} these measurements are the position of the first mass $x_1$ and the force being applied to the first mass $f_0$.
-In addition to the cascaded mass-spring system shown in Fig. \ref{fig:wave-based-control} this type of controller has also been applied to a much wider variety of systems, including 2-D arrays of masses and springs and 3-D multibody systems (citations). However in these more complex cases the approach to controller design and tuning, while wave-inspired, has been experimental in nature.
+In addition to the cascaded mass-spring system shown in Fig. \ref{fig:wave-based-control} this type of controller has also been applied to a much wider variety of systems, including 2-D arrays of masses and springs and 3-D multibody systems. However in these more complex cases the approach to controller design and tuning, while wave-inspired, has been experimental in nature.
 The underlying notional waves were not clearly defined.
 It is proposed here that many of these more complex systems can be considered in fact to be similar in dynamical structure to the mass-spring system in Fig. \ref{fig:wave-based-control}.
 Furthermore it is proposed that through a suitable change of coordinates, an equivalent in-line mass-spring system may be calculated for many of these systems.
@@ -253,7 +253,7 @@ Eq. \ref{eq:lanczos} may be expanded as
 \end{equation}
 Taking this column by column, first we have
 \begin{equation}
-d_1 \mathbf{x_1} - e_1 \mathbf{x_2} = \lambda_1 \mathbf{x_1}
+d_1 \mathbf{x_1} - e_1 \mathbf{x_2} = \Lambda \mathbf{x_1}
 \label{eq:lanc1}
 \end{equation}
 If we pre-multiply by $\mathbf{x_1^T}$, using $\mathbf{x_1^T} \mathbf{x_1}=1$ and $\mathbf{x_1^T} \mathbf{x_2}=0$ we get
@@ -263,7 +263,7 @@ d_1 = \mathbf{x_1^T} \Lambda \mathbf{x_1}
 \end{equation}
 Then rewriting Eq. \ref{eq:lanc1} as
 \begin{equation}
-e_1 \mathbf{x_2} = d_1 \mathbf{x_1} - \lambda_1 \mathbf{x_1} = \mathbf{\hat{x}_2}
+e_1 \mathbf{x_2} = d_1 \mathbf{x_1} - \Lambda \mathbf{x_1} = \mathbf{\hat{x}_2}
 \label{eq:lanc3}
 \end{equation}
 The vector $\mathbf{\hat{x}_2}$ is may be calculated from $d_1$, $\mathbf{x_1}$ and $\Lambda$ and since $\mathbf{x_2}$ is a unit vector $e_1$ may be calculated from
@@ -432,19 +432,20 @@ By examining the sign patterns of the input and output matrices, we find that th
 These are ($\delta$, $\alpha_1$), ($-f_2$, $\alpha_2$) and ($-f_3$, $\alpha_3$).
 Note that the input in the latter two cases are negative.
 The algorithms described in Section \ref{sec:algorithms} were used to calculate the equivalent mass-spring system for each of these cases.
-The transformation matrices $P$ for each case are:
+Let $\mathbf{x} = \hat{P} \begin{bmatrix}\theta & \phi_1 & \phi_2 \end{bmatrix}^T $ be the coordinate transformation from the original rocket system to the mass-spring system.
+Then the matrix $\hat{P}$ for each case is:
 \begin{equation}
-P_{\delta,\alpha_1} = 
+\hat{P}_{\delta,\alpha_1} =
 \begin{bmatrix} 1 & 0 & 0 \\
 1 & 0.740 & -0.315 \\
 1 & 0.933 & 0.502 \end{bmatrix}
 , \quad
-P_{f_2,\alpha_2} = 
+\hat{P}_{f_2,\alpha_2} = 
 \begin{bmatrix} 1 & 1 & 0 \\
 1 & 0.720 & 0.298 \\
 1 & 0.901 & 0.406 \end{bmatrix}
 , \quad
-P_{f_3,\alpha_3} = 
+\hat{P}_{f_3,\alpha_3} = 
 \begin{bmatrix} 1 & 1 & 1 \\
 1 & 1.302 & 0.257 \\
 1 & 0.489 & 0.065 \end{bmatrix}
