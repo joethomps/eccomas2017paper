@@ -38,7 +38,7 @@
 %Connections	
       \draw[force] (act) -- node {$f_0$} (m1);
  	\draw[line] (ref) -- node {$r$}  (con);
- 	\draw[line] (con) -- (act);
+ 	\draw[line] (con) -- node {$f_r$} (act);
 	\draw[line] (m1) -- node[near start] {$x_1$} (int) -| (con.240);
 	\draw[line] (for) -- node[near start] {$f_0$} (int2) -| (con.300);
 % 	\draw[line] (minus_x0) -- (k0);

@@ -51,12 +51,12 @@
 
 	\begin{scope}[xshift=3cm, yshift=1cm]
 	\node[coordinate] (p) [] {};
-	\node[cart,minimum width=1*\mw1, minimum height=1*\mh1]	(m1)		[right of=p, node distance=1.5cm]			{$$};
-	\node[cart,minimum width=1.07*\mw1, minimum height=1.07*\mh1] 	(m2) 		[right of=m1, node distance=2cm] 	{$$};
-	\node[cart,minimum width=1.62*\mw1, minimum height=1.62*\mh1] 	(m3) 		[right of=m2, node distance=2.35cm] 	{$$};
+	\node[cart,minimum width=1*\mw1, minimum height=1*\mh1]	(m1)		[right of=p, node distance=1.5cm]			{\small{0.056}};
+	\node[cart,minimum width=1.07*\mw1, minimum height=1.07*\mh1] 	(m2) 		[right of=m1, node distance=2cm] 	{\small{0.069}};
+	\node[cart,minimum width=1.62*\mw1, minimum height=1.62*\mh1] 	(m3) 		[right of=m2, node distance=2.35cm] 	{\small{0.242}};
 	 \draw[force,->] (p) -- node [above] {$\delta$} (m1);
-	\draw[spring] (m1) -- node[above] {$$} (m2);
-	\draw[spring] (m2) -- node[above] {$$} (m3);
+	\draw[spring] (m1) -- node[below,yshift=-15pt] {\small{7.89}} (m2);
+	\draw[spring] (m2) -- node[below,yshift=-15pt] {\small{6.07}} (m3);
 	\draw ([yshift=0.4cm]m1.north) -- +(0,-0.2cm);
 	\draw[->] ([yshift=0.3cm]m1.north) -- node[above] {$\alpha_1$} +(0.8cm,0);
 	\end{scope}
@@ -91,12 +91,12 @@
 
 	\begin{scope}[xshift=3cm, yshift=-2.5cm]
 	\node[coordinate] (p) [] {};
-	\node[cart,minimum width=1.36*\mw1, minimum height=1.36*\mh1]	(m1)		[right of=p, node distance=1.7cm]			{$$};
-	\node[cart,minimum width=2.8*\mw1, minimum height=2.8*\mh1] 	(m2) 		[right of=m1, node distance=3.1cm] 	{$$};
-	\node[cart,minimum width=1*\mw1, minimum height=1*\mh1] 	(m3) 		[right of=m2, node distance=2.9cm] 	{$$};
-	\draw[force,->] (p) -- node [above] {$f_2$} (m1);
-	\draw[spring] (m1) -- node[above] {$$} (m2);
-	\draw[spring] (m2) -- node[above] {$$} (m3);
+	\node[cart,minimum width=1.36*\mw1, minimum height=1.36*\mh1]	(m1)		[right of=p, node distance=1.7cm]			{\small{0.243e6}};
+	\node[cart,minimum width=2.8*\mw1, minimum height=2.8*\mh1] 	(m2) 		[right of=m1, node distance=3.1cm] 	{\small{2.11e6}};
+	\node[cart,minimum width=1*\mw1, minimum height=1*\mh1] 	(m3) 		[right of=m2, node distance=2.9cm] 	{\small{0.97e5}};
+	\draw[force,->] (p) -- node [above] {$-f_2$} (m1);
+	\draw[spring] (m1) -- node[below,yshift=-15pt] {\small{6.71e7}} (m2);
+	\draw[spring] (m2) -- node[below,yshift=-15pt] {\small{5.68e6}} (m3);
 	\draw ([yshift=0.4cm]m1.north) -- +(0,-0.2cm);
 	\draw[->] ([yshift=0.3cm]m1.north) -- node[above] {$\alpha_2$} +(0.8cm,0);
 	\end{scope}
@@ -131,12 +131,12 @@
 	
 	\begin{scope}[xshift=3cm, yshift=-6cm]
 	\node[coordinate] (p) [] {};
-	\node[cart,minimum width=1*\mw1, minimum height=1*\mh1]	(m1)		[right of=p, node distance=1.5cm]			{$$};
-	\node[cart,minimum width=1.06*\mw1, minimum height=1.06*\mh1] 	(m2) 		[right of=m1, node distance=2cm] 	{$$};
-	\node[cart,minimum width=1.5*\mw1, minimum height=1.5*\mh1] 	(m3) 		[right of=m2, node distance=2.3cm] 	{$$};
-	\draw[force,->] (p) -- node [above] {$f_3$} (m1);
-	\draw[spring] (m1) -- node[above] {$$} (m2);
-	\draw[spring] (m2) -- node[above] {$$} (m3);
+	\node[cart,minimum width=1*\mw1, minimum height=1*\mh1]	(m1)		[right of=p, node distance=1.5cm]			{\small{1.29e5}};
+	\node[cart,minimum width=1.06*\mw1, minimum height=1.06*\mh1] 	(m2) 		[right of=m1, node distance=2cm] 	{\small{1.55e5}};
+	\node[cart,minimum width=1.5*\mw1, minimum height=1.5*\mh1] 	(m3) 		[right of=m2, node distance=2.3cm] 	{\small{4.38e5}};
+	\draw[force,->] (p) -- node [above] {$-f_3$} (m1);
+	\draw[spring] (m1) -- node[below,yshift=-15pt] {\small{1.83e7}} (m2);
+	\draw[spring] (m2) -- node[below,yshift=-15pt] {\small{1.25e7}} (m3);
 	\draw ([yshift=0.4cm]m1.north) -- +(0,-0.2cm);
 	\draw[->] ([yshift=0.3cm]m1.north) -- node[above] {$\alpha_3$} +(0.8cm,0);
 	\end{scope}
