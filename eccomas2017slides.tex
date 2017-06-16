@@ -2,145 +2,161 @@
  
 \mode<presentation>
 {
-  \usetheme{Montpellier}
+  \usetheme{Boadilla}
   \setbeamercovered{transparent}
   % or whatever (possibly just delete it)
 }
 
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{graphicx}
 \usepackage{times}
 \usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,amsbsy,amsmath}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.11} 
+\usepackage{subfigure}
+\usetikzlibrary{shapes,arrows,scopes,patterns,decorations.pathreplacing}
+\usepackage[backend=biber, style=authoryear]{biblatex}
+\bibliography{eccomas_2017}
 
-\title % (optional, use only with long paper titles)
-{Title As It Is In the Proceedings}
+\title[Equivalent Mass-Spring Models]{Equivalent Mass-Spring Models of Multibody Spacecraft for the Application of Wave-based Control}
 
-\subtitle
-{Include Only If Paper Has a Subtitle}
+\author{J.W.~Thompson \and W.J.~O'Connor}
 
-\author[Author, Another] % (optional, use only with lots of authors)
-{F.~Author\inst{1} \and S.~Another\inst{2}}
-% - Give the names in the same order as the appear in the paper.
-% - Use the \inst{?} command only if the authors have different
-%   affiliation.
+\institute[UCD]{University College Dublin}
 
-\institute[Universities of Somewhere and Elsewhere] % (optional, but mostly needed)
-{
-  \inst{1}%
-  Department of Computer Science\\
-  University of Somewhere
-  \and
-  \inst{2}%
-  Department of Theoretical Philosophy\\
-  University of Elsewhere}
-% - Use the \inst command only if there are several affiliations.
-% - Keep it simple, no one is interested in your street address.
+\date[MBD 2017] % (optional, should be abbreviation of conference name)
+{8th Eccomas Thematic Conference on Multibody Dynamics}
 
-\date[CFP 2003] % (optional, should be abbreviation of conference name)
-{Conference on Fabulous Presentations, 2003}
-% - Either use conference name or its abbreviation.
-% - Not really informative to the audience, more for people (including
-%   yourself) who are reading the slides online
+\subject{Multibody Dynamics}
 
-\subject{Theoretical Computer Science}
-% This is only inserted into the PDF information catalog. Can be left
-% out. 
-
-
-
-% If you have a file called "university-logo-filename.xxx", where xxx
-% is a graphic format that can be processed by latex or pdflatex,
-% resp., then you can add a logo as follows:
-
-% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
-% \logo{\pgfuseimage{university-logo}}
-
-
-
-% Delete this, if you do not want the table of contents to pop up at
-% the beginning of each subsection:
-\AtBeginSubsection[]
-{
-  \begin{frame}<beamer>{Outline}
-    \tableofcontents[currentsection,currentsubsection]
-  \end{frame}
-}
-
-
-% If you wish to uncover everything in a step-wise fashion, uncomment
-% the following command: 
-
-%\beamerdefaultoverlayspecification{<+->}
-
+\pgfdeclareimage[height=1cm]{university-logo}{ucd_brandmark_colour}
+\logo{\pgfuseimage{university-logo}}
 
 \begin{document}
 
 \begin{frame}
   \titlepage
 \end{frame}
-
 \begin{frame}{Outline}
   \tableofcontents
-  % You might wish to add the option [pausesections]
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%-------MOTIVATION--------%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Motivation}
 
-\subsection{Wave-based Control}
+\subsection{Wave-based Modelling and Control of Lumped Flexible Systems}
 
-\begin{frame}{Motivation}{Wave-based Modelling of Lumped System}
+\begin{frame}{Wave-based Modelling of Lumped Systems}
   \begin{itemize}
   \item
-    Motivation - Wave Based Control
+   	Classic underactuated control problem
   \item
-    method for underactuated systems
+    Exhibits wave like behaviour
+  \item
+  	Novel approach to control
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Motivation}{Wave-based Control System}
+\begin{frame}{Wave-based Control System}
   \begin{itemize}
   \item
-    Motivation - Wave Based Control
+    Launch and return wave
   \item
-    method for underactuated systems
+    Measure at actuator
+    This so-called “wave-based control” (WBC) has been applied successfully to uniform and non-uniform in-line mass-spring systems \footcite{OConnor1998,OConnor2011}.
+The aim of this paper is to extend the WBC theory to a wider class of systems, and in particular the multi-body spacecraft described above.
   \end{itemize}
-\end{frame}
-
-\begin{frame}{Motivation}{Inline Mass Spring Structure}
-    Problem: there is a specific form needed for WBC
+      Problem: there is a specific form needed for WBC
     string of masses and springs
     SISO system: Input is force on first mass, Output is position of first mass
 \end{frame}
 
-\section{Numerical Examples}
+\subsection{Attitude Control of Multibody Spacecraft}
 
-\subsection{Main Results}
-
-\begin{frame}{Make Titles Informative.}
+\begin{frame}{Inline Mass Spring Structure}
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{images/satellite.jpg}
+\caption{Satellite with flexible appendages}
+\end{figure}
 \end{frame}
 
-\begin{frame}{Make Titles Informative.}
+\begin{frame}{Inline Mass Spring Structure}
+Some example of multibody spacecraft
+\begin{columns}
+\column{0.5\textwidth}
+\begin{figure}
+\includegraphics[width=\textwidth]{images/satellite.jpg}
+\caption{Satellite with flexible appendages}
+\end{figure}
+\column{0.5\textwidth}
+Some info
+\end{columns}
 \end{frame}
 
-\begin{frame}{Make Titles Informative.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%-------PROBLEM STATEMENT--------%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Problem Statement}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%-------METHODS--------%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methods}
+\subsection{Inverse Eigenvalue Problem for Jacobi Matrices}
+\subsection{Mass Spring Reconstruction}
+\subsection{Necessary and Sufficient Conditions for Transformation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%-------RESULTS--------%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results}
+
+\subsection{Segmented Rocket Model}
+
+\subsection{Test Cases for different sensor-actuator combinations}
+
+\begin{frame}{Test Case 1}
+\begin{center}
+    \input{graphics/testcase3.tex}
+\end{center}
+\end{frame}
+
+\begin{frame}{Test Case 2}
+\begin{center}
+    \input{graphics/testcase1.tex}
+\end{center}
+\end{frame}
+
+\begin{frame}{Test Case 3}
+\begin{center}
+    \input{graphics/testcase2.tex}
+\end{center}
 \end{frame}
 
 \subsection{Basic Ideas for Proofs/Implementation}
 
-\begin{frame}{Make Titles Informative.}
-\end{frame}
 
-\begin{frame}{Make Titles Informative.}
-\end{frame}
-
-\begin{frame}{Make Titles Informative.}
-\end{frame}
-
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%-------SUMMARY--------%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Summary}
 
 \begin{frame}{Summary}
+
+mass-spring representations of a wide class of SISO systems.
+force on the first mass and the output is the position of the first mass.
+These are the type of systems for which WBC has been shown to work well.
+The transformation is possible for a system described by Eqs. \ref{eq:modal1}-\ref{eq:modal3}, with non-negative and distinct eigenvalues and corresponding entries in the $\mathbf{b}$ and $\mathbf{c}$ vectors either all having the same sign or all having opposite signs.
+
+It is clear that the non-uniformity of the resulting mass-spring system and the position of this non-uniformity are key in assessing the difficulty of the control problem.
+From a wave based perspective large masses in the centre of the cascade lead to the trapping of waves in the outer part of the system increasing settling times.
 
   % Keep the summary *very short*.
   \begin{itemize}
@@ -150,19 +166,13 @@
     The \alert{second main message} of your talk in one or two lines.
   \item
     Perhaps a \alert{third message}, but not more than that.
-  \end{itemize}
-  
-  % The following outlook is optional.
-  \vskip0pt plus.5fill
-  \begin{itemize}
   \item
-    Outlook
+    Future Work
     \begin{itemize}
-    \item
-      Something you haven't solved.
-    \item
-      Something else you haven't solved.
+    \item A possible area for future research is to investigate equivalent systems where the input and output may be on different masses internal to the system.
+    \item There is also scope for using similar techniques to optimise actuator and sensor locations within a system.
     \end{itemize}
+    
   \end{itemize}
 \end{frame}
 
@@ -175,29 +185,7 @@
 
 \begin{frame}[allowframebreaks]
   \frametitle<presentation>{For Further Reading}
-    
-  \begin{thebibliography}{10}
-    
-  \beamertemplatebookbibitems
-  % Start with overview books.
-
-  \bibitem{Author1990}
-    A.~Author.
-    \newblock {\em Handbook of Everything}.
-    \newblock Some Press, 1990.
- 
-    
-  \beamertemplatearticlebibitems
-  % Followed by interesting articles. Keep the list short. 
-
-  \bibitem{Someone2000}
-    S.~Someone.
-    \newblock On this and that.
-    \newblock {\em Journal of This and That}, 2(1):50--100,
-    2000.
-  \end{thebibliography}
+\printbibliography
 \end{frame}
 
 \end{document}
-
-
