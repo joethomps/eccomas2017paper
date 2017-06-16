@@ -23,7 +23,7 @@ k = 6e7; % joint stiffness Nm
 % insel = 1
 % insgn = 1
 % outsel = 1
-
+ 
 insel = 3
 insgn = -1
 outsel = 2
@@ -88,6 +88,7 @@ x = zeros(n,1);
 x(1) = 1/norm(Qla);
 x(2) = a_diag(1)*x(1)./b_diag(1);
 x(3) = a_diag(2)*x(2)./b_diag(2)-b_diag(1)*x(1)./b_diag(2);
+check = a_diag(3)*x(3) - b_diag(2)*x(2);
 
 Di = diag(x);
 Kn = Di*J*Di
@@ -98,28 +99,28 @@ mrat = diag(Mn)./Mn(1,1);
 krat = diag(Kn,1)./Kn(1,2);
 
 %% tests
-% P1 = V*inv(sca)*U.'*Di;
-% inv(P1)*R*P1;
-% inv(P1)*Q;
-% S*P1;
-% 
-% % WBC Test
-% w = sym('omega');
-% k0 = sym('k0');
-% 
-% % WTF model
-% Ag = [0,1;-w^2,-w]; Bg = [0;w^2]; Cg = [1,0]; Dg = 0;
-% ordg = size(Ag,1);
-% 
-% % WBC dd model
-% Aw = [Ag,-Bg*Cg;-Bg*Cg,Ag]; Bw = [zeros(2,1),Bg;Bg,zeros(2,1)]; Cw = [Cg,zeros(1,2)];
-% % WBC fd model
-% P = [1/k0,1,0;0,1,0;0,0,1];
-% Ax = Aw; Bx=[Bw,zeros(2*ordg,1)]*P; Cx=k0*Cw; Dx=[0,-k0,k0/2]*P;
-% % WBC ideal actuator
-% Bx1=Bx(:,1); Bx2=Bx(:,2:3);
-% Dx1=Dx(:,1); Dx2=Dx(:,2:3);
-% Ay=Ax+Bx1*Cx; By=Bx2+Bx1*Dx2; Cy=Cx; Dy=Dx2;
+P1 = V*inv(sca)*U.'*Di;
+inv(P1)*R*P1;
+inv(P1)*Q;
+S*P1;
+
+% WBC Test
+w = sym('omega');
+k0 = sym('k0');
+
+% WTF model
+Ag = [0,1;-w^2,-w]; Bg = [0;w^2]; Cg = [1,0]; Dg = 0;
+ordg = size(Ag,1);
+
+% WBC dd model
+Aw = [Ag,-Bg*Cg;-Bg*Cg,Ag]; Bw = [zeros(2,1),Bg;Bg,zeros(2,1)]; Cw = [Cg,zeros(1,2)];
+% WBC fd model
+P = [1/k0,1,0;0,1,0;0,0,1];
+Ax = Aw; Bx=[Bw,zeros(2*ordg,1)]*P; Cx=k0*Cw; Dx=[0,-k0,k0/2]*P;
+% WBC ideal actuator
+Bx1=Bx(:,1); Bx2=Bx(:,2:3);
+Dx1=Dx(:,1); Dx2=Dx(:,2:3);
+Ay=Ax+Bx1*Cx; By=Bx2+Bx1*Dx2; Cy=Cx; Dy=Dx2;
 
 %%
 sys_ol = ss(A,-B(:,insel),C(outsel,:),D);
@@ -144,20 +145,20 @@ sys_k0 = series(k0,feedback(sys_ol,k0));
 sys_cl = series(C1,feedback(sys_k0,C2,+1));
 
 [Y,T,X] = step(sys_cl,5);
-a1 = X(:,1)
-a2 = X(:,1) + X(:,3)
-a3 = X(:,1) + X(:,3) + X(:,5)
+a1 = X(:,1);
+a2 = X(:,1) + X(:,3);
+a3 = X(:,1) + X(:,3) + X(:,5);
 
-figure(1);
-title('Step Response')
-plot(T,a1,'b',T,a2,'r-.',T,a3,'k--')
-axis([0 5 -0.3 1.1])
-axis([0 5 -0.7 2])
-legend('\alpha_1','\alpha_2','\alpha_3');
-title('Input f_2, output \alpha_2')
-xlabel('t')
-ylabel('Segment Attitude Angles')
-
-oldFolder = cd('K:\Documents\eccomas2017\graphics')
-matlab2tikz('graphf2.tex', 'height', '5cm' , 'width', '15cm');
-cd(oldFolder)
+% figure(1);
+% title('Step Response')
+% plot(T,a1,'b',T,a2,'r-.',T,a3,'k--')
+% axis([0 5 -0.3 1.1])
+% % axis([0 5 -0.7 2])
+% legend('\alpha_1','\alpha_2','\alpha_3');
+% title('Input -f_3, output \alpha_3')
+% xlabel('t')
+% ylabel('Segment Attitude Angles')
+% 
+% oldFolder = cd('K:\Documents\eccomas2017\graphics')
+% matlab2tikz('graphf3.tex', 'height', '5cm' , 'width', '15cm');
+% cd(oldFolder)
