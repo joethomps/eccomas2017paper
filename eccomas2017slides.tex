@@ -25,9 +25,9 @@
 
 \title[Equivalent Mass-Spring Models]{Equivalent Mass-Spring Models of Multibody Spacecraft for the Application of Wave-based Control}
 
-\author{J. W. Thompson} %\and W. J.~O'Connor}
+\author{Joseph Thompson} %\and W. J.~O'Connor}
 
-\institute[UCD]{University College Dublin}
+\institute[UCD, Ireland]{University College Dublin, Ireland}
 
 \date[ECCOMAS MBD 2017] % (optional, should be abbreviation of conference name)
 {8th Eccomas Thematic Conference on Multibody Dynamics \\ \vspace{8pt} \small{Czech Technical University, Prague, 19-22 June, 2017}}
@@ -53,19 +53,27 @@
 
 \subsection{Wave-based Modelling and Control of Lumped Flexible Systems}
 
-\begin{frame}{Wave-based Modelling of Lumped Systems}
+\begin{frame}{Underactuated control problem}
 \begin{itemize}
 \item Classic underactuated control problem
 \item Rest-to-rest motion
 \item Combine gross motion control and active vibration damping
-\item Novel approach - wave based model
 \end{itemize}
 %%%% image of mass-spring and underactuated systems - columns?
 \end{frame}
 
+\begin{frame}{Wave-based Modelling of Lumped Systems}
+\begin{itemize}
+\item Novel approach - wave based model \footcite{OConnor2011}
+\item Decompose the system into two components travelling into and out of the system
+\item Wave-transfer function
+\item Uniform vs. non-uniform
+%%% picture of uniform series model
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Wave-based Control System}
 \input{graphics/WBC-nunif-pres.tex}
-\vspace{0.5cm}
 \begin{itemize}
 \item Strategy:
 	\begin{enumerate} %%%% copy from eccomas pres
@@ -73,25 +81,28 @@
 	\item Wave reaches the system boundary and is reflected back leftwards
 	\item Returning wave is measured and absorbed at the actuator
 	\end{enumerate}
-\item Successfully applied to rectilinear mass-spring systems \footcite{OConnor1998,OConnor2011}
+\item Intuitive way to do control, respects the delay inherent in the system - many desirable properties
+\item Successfully applied to rectilinear mass-spring systems \footcite{OConnor1998}
 \item Objective: extend to a wider class of systems (multi-body spacecraft)
 \end{itemize}
 \end{frame}
 
 \subsection{Attitude Control of Multibody Spacecraft}
 \begin{frame}{Spacecraft Modelled as Multibody Systems}
-Actuators: TVC, thrusters, momentum wheels
-Sensors: IMU, gyroscopes, accelerometers
+\begin{itemize}
+\item How similar are these to the mass spring systems shown above
+\item Choice of actuators: TVC, thrusters, momentum wheels
+\item Choice of sensor position: IMU, gyroscopes, accelerometers
+\end{itemize}body spacecraft
+%%%% images of multi-body spacecraft
 \begin{columns}
 \column{0.5\textwidth}
 \begin{figure}
 \includegraphics[width=\textwidth]{images/satellite.jpg}
-\caption{Satellite with flexible appendages}
 \end{figure}
 \column{0.5\textwidth}
 \begin{figure}
 \includegraphics[width=\textwidth]{images/rocket3.pdf}
-\caption{Satellite with flexible appendages}
 \end{figure}
 \end{columns}
 \end{frame}
@@ -110,8 +121,7 @@ Given a SISO (single-input single-output) undamped system described by:
 y(t) = \mathbf{c}^T \mathbf{q}(t)
 \label{eq:modal2}
 \end{equation}
-where
-\begin{equation}
+$$
 \Lambda = \begin{bmatrix}
 \lambda_1  &  0 & \cdots & 0 \\
 0 & \lambda_2  & \ddots & 0 \\
@@ -120,20 +130,16 @@ where
 ,\quad \mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{bmatrix}
 ,\quad \mathbf{c} = \begin{bmatrix} c_1 \\ c_2 \\ \vdots \\ c_n \end{bmatrix}
 \label{eq:modal3}
-\end{equation}
+$$
 where $u(t)$ is the input and $y(t)$ is the output,
 \begin{enumerate}
-\item Under what conditions can this system be transformed into a mass-spring string (for which WBC is known to work well)
-\item How can the mass and stiffness values be calculated?
+\item Under what conditions can this system be transformed into a mass-spring string where the input is a force on first mass and output is the position of the first mass.
+\item If so, how can the equivalent system (mass and stiffness values) be calculated?
 \end{enumerate}
 \end{frame}
 
-\begin{frame}
-Coordinate transformation from $\mathbf{q}$ to a new coordinate system $\mathbf{x}$,
-\begin{equation}
-\mathbf{x} = P \mathbf{q}
-\label{eq:transform}
-\end{equation}
+\begin{frame}{Problem Statement}
+In other words: Can we find a coordinate transformation $\mathbf{x} = P \mathbf{q}$, from $\mathbf{q}$ to a new coordinate system $\mathbf{x}$
 such that:
 \begin{equation}
 M\ddot{\mathbf{x}}(t) + K\mathbf{x}(t) = \mathbf{\hat{b}}u(t)
@@ -143,7 +149,6 @@ M\ddot{\mathbf{x}}(t) + K\mathbf{x}(t) = \mathbf{\hat{b}}u(t)
 y(t) = \mathbf{\hat{c}}^T \mathbf{x}(t)
 \label{eq:ms2}
 \end{equation}
-where $M$, $K$, $\mathbf{\hat{b}}$ and $\mathbf{\hat{c}}$ have the following structure:
 \footnotesize{
 $$
 M = \begin{bmatrix}
@@ -153,11 +158,10 @@ m_1  &  0 & \cdots & 0 \\
 0 & 0 & \cdots & m_n \end{bmatrix}
 , \quad
 K = \begin{bmatrix}
-k_0+k_1  &  -k_1 & 0 & \cdots & 0 \\
--k_1 & k_1+k_2  & -k_2 & \ddots & 0 \\
-0 & -k_2 & \ddots & \ddots & \vdots \\
-\vdots & \ddots & \ddots & k_{n-1}+k_{n-2} & -k_{n-1} \\
-0 & 0 & \cdots & -k_{n-1} &  k_{n-1} + k_n \end{bmatrix}
+k_0+k_1  &  -k_1  & \cdots & 0 \\
+-k_1 & k_1+k_2   & \ddots & 0 \\
+\vdots & \ddots & \ddots & -k_{n-1} \\
+0 & 0  & -k_{n-1} &  k_{n-1} + k_n \end{bmatrix}
 $$
 $$
 \mathbf{\hat{b}} = \begin{bmatrix} 1 & 0 & \cdots & 0 \end{bmatrix}^T
@@ -166,6 +170,7 @@ $$
 $$
 }
 \end{frame}
+%%%%% image of mass spring required form
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%-------METHODS--------%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -173,22 +178,22 @@ $$
 \section{Methods}
 \subsection{Inverse Eigenvalue Problem for Jacobi Matrices}
 \begin{frame}
-
-First consider the transformation $\mathbf{v} = A \mathbf{q}$ where $A = diag(a_1, a_2, ..., a_n)$ is a diagonal matrix with strictly positive diagonal.
-This transformation merely scales the states of the system and leads to the new system:
+First consider the transformation $\mathbf{v} = A \mathbf{q}$
+$$A = \begin{bmatrix}
+a_1  &  0 & \cdots & 0 \\
+0 & a_2  & \ddots & 0 \\
+\vdots & \ddots & \ddots & \vdots \\
+0 & 0 & \cdots & a_n \end{bmatrix}$$
+Scales the $\mathbf{b}$ and $\mathbf{c}$ vectors without affecting $\Lambda$
 \begin{equation}
-\ddot{\mathbf{v}}(t) +  \Lambda \mathbf{v}(t) =  A^{-1} \mathbf{b}u(t)
+\ddot{\mathbf{v}}(t) +  \Lambda \mathbf{v}(t) =  A^{-1} \mathbf{b}u(t) =  \begin{bmatrix} b_1/a_1 \\ b_2/a_2 \\ \vdots \\ b_n/a_n  \end{bmatrix} u(t)
 \label{eq:scaled1}
 \end{equation}
 \begin{equation}
-y(t) = \mathbf{c}^T  A \mathbf{v}(t)
+y(t) = \mathbf{c}^T  A \mathbf{v}(t) = \begin{bmatrix} a_1 c_1 & a_2 c_2 & \cdots & a_n c_n \end{bmatrix} \mathbf{v}(t)
 \label{eq:scaled2}
 \end{equation}
-Here the input and output vectors $\mathbf{b}$ and $\mathbf{c}$ are changed. Note however the matrix $\Lambda$ of eigenvalues is unaffected by the transformation.
-The choice of values $a_i$ are used to achieve the correct form of the input and output $\mathbf{\hat{b}}$ and $\mathbf{\hat{c}}$ vectors of the mass-spring system after the final step.
-The values of the $a_i$ are calculated in Section \ref{sec:choiceai} below.
 \end{frame}
-
 
 \subsection{Mass Spring Reconstruction}
 \begin{frame}
@@ -287,14 +292,17 @@ Segmented rocket model
 \end{frame}
 
 \begin{frame}{Segmented rocket model}
-Equations of motion:
+\begin{itemize}
+\item Equations of motion:
 \begin{multline}
 \input{python/eq1.tex}
 \end{multline}
-Output equation:
+\item Output equation:
 \begin{equation}
 \input{python/eq2.tex}
 \end{equation}
+\item Choice of 4 actuators and 3 attitude sensors
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Model Parameters}
@@ -367,9 +375,6 @@ text
     \input{graphics/testcase2.tex}
 \end{center}
 \end{frame}
-
-\subsection{Basic Ideas for Proofs/Implementation}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%-------SUMMARY--------%%%%%%%%%%%%%%%%%%%%%%%%%%
