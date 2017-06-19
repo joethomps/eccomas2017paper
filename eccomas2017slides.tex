@@ -59,7 +59,7 @@
 \item Rest-to-rest motion
 \item Combine gross motion control and active vibration damping
 \end{itemize}
-%%%% image of mass-spring and underactuated systems - columns?
+\input{graphics/lumped_system.tex}
 \end{frame}
 
 \begin{frame}{Wave-based Modelling of Lumped Systems}
@@ -68,7 +68,7 @@
 \item Decompose the system into two components travelling into and out of the system
 \item Wave-transfer function
 \item Uniform vs. non-uniform
-%%% picture of uniform series model
+\input{graphics/series_model_tf_unif.tex}
 \end{itemize}
 \end{frame}
 
@@ -177,7 +177,7 @@ $$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Methods}
 \subsection{Inverse Eigenvalue Problem for Jacobi Matrices}
-\begin{frame}
+\begin{frame}{Scaling of input and output vectors}
 First consider the transformation $\mathbf{v} = A \mathbf{q}$
 $$A = \begin{bmatrix}
 a_1  &  0 & \cdots & 0 \\
