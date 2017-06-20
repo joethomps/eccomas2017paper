@@ -60,6 +60,7 @@
 \item Classic underactuated control problem
 \item Rest-to-rest motion
 \item Combine gross motion control and active vibration damping
+\item With a single actuator
 \end{itemize}
 \begin{center}
 \includegraphics[width=0.85\textwidth]{images/under_actuated_systems.png}
@@ -70,8 +71,9 @@
 \begin{itemize}
 \item Novel approach - wave based model \footcite{OConnor2011}
 \item Decompose the system into two components travelling into and out of the system
-\item Wave-transfer function
-\item Uniform vs. non-uniform
+\item Wave-transfer function:
+$ \quad G(s) =1+ \frac{m s^2}{2k} \pm \sqrt{\frac{m s^2}{k}+\frac{m^2 s^4}{4 k^2}}$
+\item Dealing with non-uniformity
 \end{itemize}
 \includegraphics[width=\textwidth]{images/series_model_tf_unif.pdf}
 \end{frame}
@@ -85,7 +87,7 @@
 	\item Wave reaches the system boundary and is reflected back leftwards
 	\item Returning wave is measured and absorbed at the actuator
 	\end{enumerate}
-\item Intuitive way to do control, respects the delay inherent in the system - many desirable properties
+\item Intuitive way to do control, respects the delay inherent in the system - with many desirable properties
 \item Successfully applied to rectilinear mass-spring systems \footcite{OConnor1998}
 \item Objective: extend to a wider class of systems (multi-body spacecraft)
 \end{itemize}
@@ -93,22 +95,20 @@
 
 \subsection{Attitude Control of Multibody Spacecraft}
 \begin{frame}{Spacecraft Modelled as Multibody Systems}
+%%%% images of multi-body spacecraft
+\begin{columns}
+\column{0.3\textwidth}
+\includegraphics[width=\textwidth]{images/satellite.jpg}
+\column{0.1\textwidth}
+\includegraphics[width=\textwidth]{images/esca.png}
+\column{0.6\textwidth}
+\includegraphics[width=\textwidth]{images/rocket3.pdf}
+\end{columns}
 \begin{itemize}
 \item How similar are these to the mass spring systems shown above
 \item Choice of actuators: TVC, thrusters, momentum wheels
 \item Choice of sensor position: IMU, gyroscopes, accelerometers
-\end{itemize}body spacecraft
-%%%% images of multi-body spacecraft
-\begin{columns}
-\column{0.5\textwidth}
-\begin{figure}
-\includegraphics[width=\textwidth]{images/satellite.jpg}
-\end{figure}
-\column{0.5\textwidth}
-\begin{figure}
-\includegraphics[width=\textwidth]{images/rocket3.pdf}
-\end{figure}
-\end{columns}
+\end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,10 +150,14 @@ M\ddot{\mathbf{x}}(t) + K\mathbf{x}(t) = \mathbf{\hat{b}}u(t)
 \label{eq:ms1}
 \end{equation}
 \begin{equation}
+\ddot{\mathbf{x}}(t) + M^{-1} K\mathbf{x}(t) = M^{-1} \mathbf{\hat{b}}u(t)
+\label{eq:ms1}
+\end{equation}
+\begin{equation}
 y(t) = \mathbf{\hat{c}}^T \mathbf{x}(t)
 \label{eq:ms2}
 \end{equation}
-\footnotesize{
+\footnotesize
 $$
 M = \begin{bmatrix}
 m_1  &  0 & \cdots & 0 \\
@@ -167,12 +171,12 @@ k_0+k_1  &  -k_1  & \cdots & 0 \\
 \vdots & \ddots & \ddots & -k_{n-1} \\
 0 & 0  & -k_{n-1} &  k_{n-1} + k_n \end{bmatrix}
 $$
+\normalsize
 $$
 \mathbf{\hat{b}} = \begin{bmatrix} 1 & 0 & \cdots & 0 \end{bmatrix}^T
 ,\quad \mathbf{\hat{c}} = \begin{bmatrix} 1 & 0 & \cdots & 0 \end{bmatrix}^T
 \label{eq:ms3}
 $$
-}
 \end{frame}
 %%%%% image of mass spring required form
 
@@ -200,95 +204,48 @@ y(t) = \mathbf{c}^T  A \mathbf{v}(t) = \begin{bmatrix} a_1 c_1 & a_2 c_2 & \cdot
 \end{frame}
 
 \begin{frame}{Inverse eigenvalue problem for Jacobi matrix}
-Gladwell \cite{gladwell1986inverse} investigates inverse eigenvalue problems for Jacobi matrices which are defined as follows:
-a Jacobi matrix is a positive semi-definite symmetric tri-diagonal matrix with strictly negative co-diagonal.
-We make use of the following theorem for Jacobi matrices:
+Jacobi matrix:
+$$
+J = \begin{bmatrix} d_1  &  -e_1 & 0 & \cdots & 0 \\
+-e_1 & d_2  & -e_2 & \ddots & 0 \\
+0 & -e_2 & \ddots & \ddots & \vdots \\
+\vdots & \ddots & \ddots & d_{n-1} & -e_{n-1} \\
+0 & 0 & \cdots & -e_{n-1} & d_n \end{bmatrix}
+$$
 
+$$J =  M^{-\frac{1}{2}} K M^{-\frac{1}{2}}$$
+
+Inverse eigenvalue problem
+Find $X$ such that $$J = X^T \Lambda X$$
+\end{frame}
+
+\begin{frame}{Solution of the inverse eigenvalue problem}
+Lanczos Algorithm\footcite{gladwell1986inverse}
 There is a unique Jacobi matrix $\mathbf{J}$ having specified eigenvalues $(\lambda_i)_1^n$, where
 \begin{equation}
 0 \leq \lambda_1<\lambda_2< \cdots <\lambda_n
 \label{eq:lambda}
 \end{equation}
-and with normalised eigenvectors $(\mathbf{u}_i)_1^n$  having non-zero specified values $(u_{1i})_1^n$ of their first components.
-Recall that $\mathbf{u}_i = \begin{bmatrix} u_{1i} &  u_{2i} & \cdots & u_{ni} \end{bmatrix}^T$.
+and with normalised eigenvectors having non-zero specified values of their first components.
 
-%To simplify notation let $U$ be the orthogonal matrix whose columns are the eigenvectors $\mathbf{u}_i$ of the Jacobi matrix $J$ and let $X$ be the transpose of $U$ with columns $\mathbf{x}_i$.
-%Then the theorem says that for a given $\Lambda$ and $\mathbf{x_1}$ (the first column of $X$) there is a unique Jacobi matrix $J$ and orthogonal matrix $U$.
-%The Lanczos algorithm may be used to calculate the matrices $J$ and $U$ ($X^T$) for a given $\Lambda$ and $\mathbf{x_1}$ such that 
-%\begin{equation}
-%J U = U \Lambda
-%\end{equation}
-%This may be rewritten in terms of $X$ as
-%\begin{equation}
-%X J = \Lambda X
-%\label{eq:lanczos}
-%\end{equation}
-%The Lanczos algorithm works as follows.
-%Eq. \ref{eq:lanczos} may be expanded as
-%\begin{equation}
-%\begin{bmatrix} \mathbf{x_1} &  \mathbf{x_2} & \cdots & \mathbf{x_n} \end{bmatrix}
-%\begin{bmatrix} d_1  &  -e_1 & 0 & \cdots & 0 \\
-%-e_1 & d_2  & -e_2 & \ddots & 0 \\
-%0 & -e_2 & \ddots & \ddots & \vdots \\
-%\vdots & \ddots & \ddots & d_{n-1} & -e_{n-1} \\
-%0 & 0 & \cdots & -e_{n-1} & d_n \end{bmatrix}
-%=
-%\Lambda
-%\begin{bmatrix} \mathbf{x_1} &  \mathbf{x_2} & \cdots & \mathbf{x_n} \end{bmatrix}
-%\end{equation}
-%Taking this column by column, first we have
-%\begin{equation}
-%d_1 \mathbf{x_1} - e_1 \mathbf{x_2} = \Lambda \mathbf{x_1}
-%\label{eq:lanc1}
-%\end{equation}
-%If we pre-multiply by $\mathbf{x_1^T}$, using $\mathbf{x_1^T} \mathbf{x_1}=1$ and $\mathbf{x_1^T} \mathbf{x_2}=0$ we get
-%\begin{equation}
-%d_1 = \mathbf{x_1^T} \Lambda \mathbf{x_1}
-%\label{eq:lanc2} 
-%\end{equation}
-%Then rewriting Eq. \ref{eq:lanc1} as
-%\begin{equation}
-%e_1 \mathbf{x_2} = d_1 \mathbf{x_1} - \Lambda \mathbf{x_1} = \mathbf{\hat{x}_2}
-%\label{eq:lanc3}
-%\end{equation}
-%The vector $\mathbf{\hat{x}_2}$ is may be calculated from $d_1$, $\mathbf{x_1}$ and $\Lambda$ and since $\mathbf{x_2}$ is a unit vector $e_1$ may be calculated from
-%\begin{equation}
-%e_1 = \norm{\mathbf{\hat{x}_2}}
-%\label{eq:lanc4}
-%\end{equation}
-%and then
-%\begin{equation}
-%\mathbf{x_2} = \frac{\mathbf{\hat{x}_2}}{e_1}
-%\label{eq:lanc5}
-%\end{equation}
-%This procedure of Eqs. \ref{eq:lanc1} to \ref{eq:lanc5} may be repeated for each column of the equation calculating all the $d_i$, $e_i$ and $\mathbf{x_i}$.
-%
-%Using this algorithm we can find the second transformation $\mathbf{z} = U \mathbf{v}$ which leads to the new system:
-%\begin{equation}
-%\ddot{\mathbf{z}}(t) + J \mathbf{z}(t) =   U A^{-1} \mathbf{b} u(t)
-%\label{eq:jacobi1}
-%\end{equation}
-%\begin{equation}
-%y(t) = \mathbf{c}^T  A U^T \mathbf{z}(t)
-%\label{eq:jacobi2}
-%\end{equation}
-%Note that this transformation is only possible if Eq. \ref{eq:lambda} holds.
-%
+Then the theorem says that for a given $\Lambda$ and $\mathbf{x_1}$ (the first column of $X$) there is a unique Jacobi matrix $J$ and orthogonal matrix $U$.
+\end{frame}
+
+\begin{frame}
+The Lanczos algorithm may be used to calculate the matrices $J$ and $X$ for a given $\Lambda$ and $\mathbf{x_1}$
+Using this algorithm we can find the second transformation $\mathbf{z} = X^T \mathbf{v}$ which leads to the new system:
+\begin{equation}
+\ddot{\mathbf{z}}(t) + J \mathbf{z}(t) =   U A^{-1} \mathbf{b} u(t)
+\end{equation}
+\begin{equation}
+y(t) = \mathbf{c}^T  A U^T \mathbf{z}(t)
+\end{equation}
+
 \end{frame}
 
 \subsection{Mass Spring Reconstruction}
 \begin{frame}
 The final step is to reconstruct the mass and stiffness matrices $M$ and $K$.
-It can be shown that $J =  M^{-\frac{1}{2}} K M^{-\frac{1}{2}}$ and the transformation $\mathbf{x} = M^{\frac{1}{2}} \mathbf{z}$ where $M$ has the form given in Eq. \ref{eq:ms3} leads to the final system:
-\begin{equation}
-M \ddot{\mathbf{x}}(t) + K \mathbf{x}(t) = M^{\frac{1}{2}} U A^{-1} \mathbf{b} u(t)
-\label{eq:fin1}
-\end{equation}
-\begin{equation}
-y(t) = \mathbf{c}^T  A U^T M^{\frac{1}{2}}\mathbf{x}(t)
-\label{eq:fin2}
-\end{equation}
-
 The matrix $M$ is calculated as follows: We can write $K = M^{\frac{1}{2}} J M^{\frac{1}{2}}$ where $K$ and $M$ are mass and stiffness matrices of Eq. \ref{eq:ms3} which we want to calculate.
 We will only consider here the case where $k_0 = k_n = 0$ and where $K$ (and $J$) are singular, corresponding to a free-free mass-spring system.
 In this case one eigenvalue of the system $\lambda_1 = 0$.
@@ -306,9 +263,20 @@ The values of the $k_i$ easily follow.
 The correct choice for $m_1$ is shown in Eq. \ref{eq:bcxm} below.
 \end{frame}
 
+\begin{frame}
+transformation $\mathbf{x} = M^{\frac{1}{2}} \mathbf{z}$ where $M$ has the form given in Eq. \ref{eq:ms3} leads to the final system:
+\begin{equation}
+M \ddot{\mathbf{x}}(t) + K \mathbf{x}(t) = M^{\frac{1}{2}} U A^{-1} \mathbf{b} u(t)
+\label{eq:fin1}
+\end{equation}
+\begin{equation}
+y(t) = \mathbf{c}^T  A U^T M^{\frac{1}{2}}\mathbf{x}(t)
+\label{eq:fin2}
+\end{equation}
+\end{frame}
 
 \subsection{Necessary and Sufficient Conditions for Transformation}
-\begin{frame}
+\begin{frame}{Correct form of b and c vectors}
 By comparing this system to that of Eqs. \ref{eq:ms1}-\ref{eq:ms3} we get the following equation for $\mathbf{b}$ and $\mathbf{c}$.
 \begin{equation}
 M^{\frac{1}{2}} U A^{-1} \mathbf{b} = M^{\frac{1}{2}} U A \mathbf{c} = \begin{bmatrix} 1 &  0 & \cdots & 0 \end{bmatrix}^T
