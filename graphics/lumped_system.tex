@@ -9,11 +9,12 @@
       \draw[very thick, fill=white] ([yshift=0.12cm, xshift=0.2cm] path picture bounding box.south west) circle (0.1cm);
       \draw[very thick,fill=white] ([yshift=0.12cm, xshift=-0.2cm] path picture bounding box.south east) circle (0.1cm);}]
 \tikzstyle{pt} = [coordinate]
+\tikzstyle{force}=[thick,->,>=latex,draw=blue,fill=blue]
 
 \begin{tikzpicture}[scale=1,every node/.style={font=\small}]
 
 %Nodes
-	\node[actuator]		(act)					{};
+	\node[pt]		(act)					{};
 	\node[cart,]	(m1)		[right of=act, node distance=1.4cm]			{$m_1$};
 	\node[cart] 	(m2) 		[right of=m1, node distance=1.8cm] 	{$m_2$};
        \node[pt] 	(pt1) 		[right of=m2, node distance=1cm] 	{};
@@ -21,23 +22,17 @@
 	\node[cart] 	(m3) 		[right of=pt2, node distance=1cm] 	{$m_n$};
 
 %Connections	
-	\draw[spring] (act) -- node[above, yshift=2pt] {$k_1$} (m1);
-	\draw[spring] (m1) -- node[above, yshift=2pt] {$k_2$} (m2);
-	\draw[spring] (m2) -- node[above] {$k_3$} (pt1);
+	\draw[force] (act) -- node[above, yshift=2pt] {$u(t)$} (m1);
+	\draw[spring] (m1) -- node[above, yshift=2pt] {$k_1$} (m2);
+	\draw[spring] (m2) -- node[above,yshift=2pt] {$k_2$} (pt1);
 	\draw[thick, dashed] (pt1) -- (pt2);
-	\draw[spring] (pt2) -- node[above] {$k_n$} (m3);
+	\draw[spring] (pt2) -- node[above, xshift=-3pt, yshift=1pt] {$k_{n-1}$} (m3);
 	
 	\draw[ground] (m1.south west) -- (m1.south east);
 	\draw[ground] (m2.south west) -- (m2.south east);
 	\draw[ground] (m3.south west) -- (m3.south east);
 	
-	\draw[gray] ([yshift=0.35cm]act.north) -- +(0,-0.1cm);
-	\draw[->,gray] ([yshift=0.3cm]act.north) node[above] (A0) {$x_0$} -- +(0.5cm,0);
-	\draw[gray] ([yshift=0.35cm]m1.north) -- +(0,-0.1cm);
-	\draw[->,gray] ([yshift=0.3cm]m1.north) node[above] (A1) {$x_1$} -- +(0.5cm,0);
-	\draw[gray] ([yshift=0.35cm]m2.north) -- +(0,-0.1cm);
-	\draw[->,gray] ([yshift=0.3cm]m2.north) node[above] (A2) {$x_2$} -- +(0.5cm,0);
-	\draw[gray] ([yshift=0.35cm]m3.north) -- +(0,-0.1cm);
-	\draw[->,gray] ([yshift=0.3cm]m3.north) node[above] (A0) {$x_n$} -- +(0.5cm,0);
+	\draw[] ([yshift=0.35cm]m1.north) -- +(0,-0.1cm);
+	\draw[->] ([yshift=0.3cm]m1.north) node[above] (A1) {$y(t)$} -- +(0.5cm,0);
 	
 \end{tikzpicture}
