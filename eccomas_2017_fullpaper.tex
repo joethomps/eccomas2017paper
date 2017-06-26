@@ -203,11 +203,11 @@ The coordinate transformation is carried out in three steps.
 First consider the transformation $\mathbf{v} = A \mathbf{q}$ where $A = diag(a_1, a_2, ..., a_n)$ is a diagonal matrix with strictly positive diagonal.
 This transformation merely scales the states of the system and leads to the new system:
 \begin{equation}
-\ddot{\mathbf{v}}(t) +  \Lambda \mathbf{v}(t) =  A^{-1} \mathbf{b}u(t)
+\ddot{\mathbf{v}}(t) +  \Lambda \mathbf{v}(t) =  A \mathbf{b}u(t)
 \label{eq:scaled1}
 \end{equation}
 \begin{equation}
-y(t) = \mathbf{c}^T  A \mathbf{v}(t)
+y(t) = \mathbf{c}^T  A^{-1} \mathbf{v}(t)
 \label{eq:scaled2}
 \end{equation}
 Here the input and output vectors $\mathbf{b}$ and $\mathbf{c}$ are changed. Note however the matrix $\Lambda$ of eigenvalues is unaffected by the transformation.
@@ -215,7 +215,7 @@ The choice of values $a_i$ are used to achieve the correct form of the input and
 The values of the $a_i$ are calculated in Section \ref{sec:choiceai} below.
 
 \subsection{Inverse Eigenvalue Problem for Jacobi Matrix and Lanczos Algorithm}
-Gladwell \cite{gladwell1986inverse} investigates inverse eigenvalue problems for Jacobi matrices which are defined as follows:
+In \cite{gladwell1986inverse} Gladwell investigates inverse eigenvalue problems for Jacobi matrices which are defined as follows:
 a Jacobi matrix is a positive semi-definite symmetric tri-diagonal matrix with strictly negative co-diagonal.
 We make use of the following theorem for Jacobi matrices:
 
@@ -366,7 +366,7 @@ From a control perspective the system inputs and the measured outputs are key.
 In the mass-spring system of Fig. \ref{fig:wave-based-control} the input and measured output are the force on the first mass and the position of the first mass respectively.
 This is the preferred arrangement to apply wave-based control.
 When the input is a gimballed engine acting on the lowest segment and the measured output is the angle of this lowest segment, then it will be shown that the system is indeed similar to a cascaded 3-mass, 2-spring system. However, even if the segments in the rocket model have equal masses and moments of inertia, the corresponding equivalent mass-spring system  is not uniform.
-Furthermor the correct choices for the equivalent masses and springs are far from obvious.
+Furthermore the correct choices for the equivalent masses and springs are far from obvious.
 We might distinguish between outputs which are measured and used for control, and possible other system outputs, such as the orientation of the tip.
 In the present examples, however, where the reference and measured variables are angles (or attitude), the distinction does not matter, because if the control system succeeds in damping the vibrations, then the final angles of all segments will be equal.
 
@@ -450,7 +450,8 @@ Then the matrix $\hat{P}$ for each case is:
 1 & 1.302 & 0.257 \\
 1 & 0.489 & 0.065 \end{bmatrix}
 \end{equation}
-Fig. \ref{fig:rocket-trans} shows these equivalent systems. Tab. \ref{tab:equiv_vals} summarizes the equivalent mass and spring values.
+Fig. \ref{fig:rocket-trans} shows these equivalent systems.
+Table \ref{tab:equiv_vals} summarizes the equivalent mass and spring values.
 \begin{figure}[h]
   \begin{center}
     \input{graphics/rocket-trans.tex}
@@ -575,7 +576,7 @@ The objective could be to make the resulting equivalent mass-spring system as cl
 
 %------------------------------------------------------------
 % biliography
-\bibliographystyle{acm}
+\bibliographystyle{ieeetr}
 \bibliography{eccomas_2017}
 
 \end{document} 
